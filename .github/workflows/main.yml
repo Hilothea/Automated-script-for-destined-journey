@@ -1,0 +1,97 @@
+name: Build and Release Merged Script
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 
+
+    - name: Combine scripts
+      run: |
+        # Define the output file name
+        output_file="Automated-script-for-destined-journey .js"
+        
+        # Define the order of script files to be merged
+        files=(
+            "config.js"
+            "utils.js"
+            "experience-level.js"
+            "currency-system.js"
+            "info-injection.js"
+            "event-chain-system.js"
+            "main-controller.js"
+        )
+        
+        # Create or clear the output file
+        > "$output_file"
+        
+        # Loop through the files and append their content to the output file
+        for file in "${files[@]}"
+        do
+            echo "// ======================== [Module: ${file}] ========================" >> "$output_file"
+            cat "$file" >> "$output_file"
+            echo "" >> "$output_file"
+            echo "" >> "$output_file"
+        done
+
+    - name: Commit and push if changed
+      id: commit
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add "Automated-script-for-destined-journey .js"
+        if git diff --staged --quiet; then
+          echo "No changes to commit."
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          git commit -m "Automated build: updated Automated-script-for-destined-journey .js"
+          git push
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Upload artifact
+      # Updated from v3 to v4
+      uses: actions/upload-artifact@v4
+      with:
+        name: merged-script-artifact
+        path: "Automated-script-for-destined-journey .js"
+
+  release:
+    needs: build
+    if: needs.build.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      # Updated from v3 to v4
+      uses: actions/download-artifact@v4
+      with:
+        name: merged-script-artifact
+        
+    - name: Get next version
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        name: "Release ${{ steps.tag_version.outputs.new_tag }}"
+        body: |
+          Automated release of the merged script.
+          See the attached file for the latest version.
+        files: "Automated-script-for-destined-journey .js"

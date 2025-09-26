@@ -10,7 +10,7 @@ permissions:
 
 env:
   OUTPUT_FILE: "automated-script-for-destined-journey.js"
-  JSON_FILE: "命定之诗与黄昏之歌自动化脚本.json"
+  JSON_FILE: "automated-script-for-destined-journey.json"
 
 jobs:
   build:
@@ -115,9 +115,7 @@ jobs:
             content: scriptContent,
             info: readmeContent,
             buttons: [],
-            data: {},
-            buildTime: new Date().toISOString(),
-            version: process.env.GITHUB_SHA || 'unknown'
+            data: {}
           };
           
           // 将 JSON 对象写入文件
@@ -209,7 +207,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OUTPUT_FILE: "automated-script-for-destined-journey.js"
-      JSON_FILE: "命定之诗与黄昏之歌自动化脚本.json"
+      JSON_FILE: "automated-script-for-destined-journey.json"
     steps:
     - name: Download artifact
       uses: actions/download-artifact@v4

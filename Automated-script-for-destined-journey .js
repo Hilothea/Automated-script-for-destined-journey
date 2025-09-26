@@ -25,6 +25,7 @@
         GP_TO_CP: 100,              // 金到铜
         SP_TO_CP: 10,               // 银到铜
         AP_Acquisition_Level: 1,    // 每X级获得属性点
+        Key_level: 60               //关键等级60
     };
 
     // 将配置暴露给全局范围
@@ -58,7 +59,8 @@
             'property_error',
             'Location',
             'Time',
-            'LV+'
+            'LV+',
+            'Key_level'
         ];
         uninjectPrompts(idsToRemove);
     }
@@ -287,6 +289,25 @@
 })();
 
 
+// ======================== [Module: Key_level.js] ========================
+(function() {
+    'use strict';
+    function Key_level(user) {
+        if(user.状态.等级[0] >= 60){
+        injectPrompts([{
+            id: 'Key_level',
+            position: 'none',
+            role: 'system',
+            depth: 0,
+            content: 'user_lv>=60',
+            should_scan: true
+        }]);
+        }
+    }
+    window.Key_level = Key_level;
+})();
+
+
 // ======================== [Module: main-controller.js] ========================
 (function() {
     'use strict';
@@ -310,9 +331,10 @@
         // 按照顺序执行模块
         window.uninject();                           // 1. 解除注入
         window.experiencegrowth(user);               // 2. 经验与等级处理
-        window.CurrencySystem(property);                 // 3. 货币换算
+        window.CurrencySystem(property);             // 3. 货币换算
         window.inforead(world);                      // 4. 信息读取与注入
         window.event_chain(eventchain);              // 6. 事件链处理
+        window.Key_level(user);                      //7.关键等级检测
     }
 
     // 将主函数暴露给全局范围

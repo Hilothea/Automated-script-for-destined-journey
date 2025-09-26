@@ -20,9 +20,10 @@
         // 按照顺序执行模块
         window.uninject();                           // 1. 解除注入
         window.experiencegrowth(user);               // 2. 经验与等级处理
-        window.CurrencySystem(property);                 // 3. 货币换算
+        window.CurrencySystem(property);             // 3. 货币换算
         window.inforead(world);                      // 4. 信息读取与注入
         window.event_chain(eventchain);              // 6. 事件链处理
+        window.Key_level(user);                      //7.关键等级检测
     }
 
     // 将主函数暴露给全局范围

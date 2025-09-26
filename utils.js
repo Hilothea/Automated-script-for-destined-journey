@@ -21,7 +21,8 @@
             'property_error',
             'Location',
             'Time',
-            'LV+'
+            'LV+',
+            'Key_level'
         ];
         uninjectPrompts(idsToRemove);
     }

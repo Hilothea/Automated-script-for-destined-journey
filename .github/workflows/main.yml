@@ -32,6 +32,7 @@ jobs:
             "currency-system.js"
             "info-injection.js"
             "event-chain-system.js"
+            "Key_level.js"
             "main-controller.js"
         )
         

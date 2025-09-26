@@ -24,6 +24,7 @@
         GP_TO_CP: 100,              // 金到铜
         SP_TO_CP: 10,               // 银到铜
         AP_Acquisition_Level: 1,    // 每X级获得属性点
+        Key_level: 60               //关键等级60
     };
 
     // 将配置暴露给全局范围

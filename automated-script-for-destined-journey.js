@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-26 10:33:41 UTC
+// 构建时间: 2025-09-26 10:49:23 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js main-controller.js
 // ================================================================
 
@@ -27,7 +27,7 @@
 
     // 核心游戏配置
     const GAME_CONFIG = {
-        PP_TO_GP: 100,              // 铂到金
+        PP_TO_GP: 10,              // 铂到金
         GP_TO_SP: 10,               // 金到银
         SP_TO_CP: 10,               // 银到铜
         AP_Acquisition_Level: 1,    // 每X级获得属性点
@@ -477,7 +477,7 @@
         const user = variables.stat_data?.角色; 
         const property = variables?.stat_data?.财产; 
         const world = variables?.stat_data?.世界; 
-        const eventchain =variables.stat_data?.事件链;
+        const eventchain = variables.stat_data?.事件链;
         
         if (!user || !property || !world ||!eventchain) {
             console.error("Core data missing, script terminated");

@@ -10,7 +10,7 @@
         const user = variables.stat_data?.角色; 
         const property = variables?.stat_data?.财产; 
         const world = variables?.stat_data?.世界; 
-        const eventchain =variables.stat_data?.事件链;
+        const eventchain = variables.stat_data?.事件链;
         
         if (!user || !property || !world ||!eventchain) {
             console.error("Core data missing, script terminated");

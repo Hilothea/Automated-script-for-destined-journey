@@ -56,7 +56,7 @@
         <div class="test-case">
             <h3>测试用例1：PP购买，GP足够抵扣</h3>
             <p>初始货币：PP=0, GP=200, SP=50, CP=100</p>
-            <p>扣除：PP=-1 (需要100GP抵扣)</p>
+            <p>扣除：PP=-1 (需要10GP抵扣)</p>
             <button class="test-button" onclick="testCase1()">执行测试</button>
             <div id="result1" class="result"></div>
         </div>
@@ -64,7 +64,7 @@
         <div class="test-case">
             <h3>测试用例2：PP购买，需要多级换算</h3>
             <p>初始货币：PP=0, GP=50, SP=600, CP=200</p>
-            <p>扣除：PP=-1 (需要100GP，但只有50GP，需要SP补充)</p>
+            <p>扣除：PP=-1 (需要10GP，但只有50GP，足够抵扣)</p>
             <button class="test-button" onclick="testCase2()">执行测试</button>
             <div id="result2" class="result"></div>
         </div>
@@ -72,7 +72,7 @@
         <div class="test-case">
             <h3>测试用例3：货币不足，破产情况</h3>
             <p>初始货币：PP=0, GP=10, SP=20, CP=50</p>
-            <p>扣除：PP=-2 (需要200GP，但总价值不足)</p>
+            <p>扣除：PP=-2 (需要20GP，但总价值不足)</p>
             <button class="test-button" onclick="testCase3()">执行测试</button>
             <div id="result3" class="result"></div>
         </div>
@@ -123,7 +123,7 @@
             };
             
             window.CurrencySystem(property);
-            displayResult('result1', property, '预期：PP=0, GP=100, SP=50, CP=100');
+            displayResult('result1', property, '预期：PP=0, GP=190, SP=50, CP=100');
         }
         
         function testCase2() {
@@ -137,7 +137,7 @@
             };
             
             window.CurrencySystem(property);
-            displayResult('result2', property, '预期：PP=0, GP=0, SP=100, CP=200');
+            displayResult('result2', property, '预期：PP=0, GP=40, SP=600, CP=200');
         }
         
         function testCase3() {
@@ -151,7 +151,7 @@
             };
             
             window.CurrencySystem(property);
-            displayResult('result3', property, '预期：PP=0, GP=0, SP=0, CP=-18750(负数表示欠债)');
+            displayResult('result3', property, '预期：PP=0, GP=0, SP=0, CP=-750(负数表示欠债)');
         }
         
         function testCase4() {
@@ -165,7 +165,7 @@
             };
             
             window.CurrencySystem(property);
-            displayResult('result4', property, '预期：PP=0, GP=50, SP=50, CP=100');
+            displayResult('result4', property, '预期：PP=0, GP=0, SP=0, CP=-12400(负数表示欠债)');
         }
     </script>
 </body>

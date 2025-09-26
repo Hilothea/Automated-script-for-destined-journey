@@ -20,7 +20,7 @@
 
     // 核心游戏配置
     const GAME_CONFIG = {
-        PP_TO_GP: 100,              // 铂到金
+        PP_TO_GP: 10,              // 铂到金
         GP_TO_SP: 10,               // 金到银
         SP_TO_CP: 10,               // 银到铜
         AP_Acquisition_Level: 1,    // 每X级获得属性点

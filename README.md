@@ -70,8 +70,17 @@
   - 状态跟踪
   - 提示注入
 
-### 8. 主流程控制 (`main-controller.js`)
-- **版本/更新时间**: v0.1/25.9.24
+### 8. 关键等级检测 (`Key_level.js`)
+- **版本/更新时间**: v0.0.2/25.9.26
+- **功能**: 检测用户是否达到关键等级阈值
+- **主要函数**: `Key_level(user)`
+- **特性**:
+  - 关键等级阈值检测（默认60级）
+  - 自动系统提示注入
+  - 可配置阈值设置
+
+### 9. 主流程控制 (`main-controller.js`)
+- **版本/更新时间**: v0.2/25.9.26
 - **功能**: 协调所有模块的执行
 - **主要函数**: `Main_processes(variables)`
 - **特性**:
@@ -90,9 +99,10 @@
 //例如:
 window.uninject();                           // 1. 解除注入
 //window.experiencegrowth(user);               // 2. 经验与等级处理
-window.CurrencySystem(property);                 // 3. 货币换算
+window.CurrencySystem(property);             // 3. 货币换算
 //window.inforead(world);                      // 4. 信息读取与注入
 //window.event_chain(eventchain);              // 6. 事件链处理
+//window.Key_level(user);                      // 7. 关键等级检测
 ```
 
 ## 兼容性说明

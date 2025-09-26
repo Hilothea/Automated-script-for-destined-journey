@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+env:
+  OUTPUT_FILE: "automated-script-for-destined-journey.js"
+  JSON_FILE: "命定之诗与黄昏之歌自动化脚本.json"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,16 +19,22 @@ jobs:
       changed: ${{ steps.commit.outputs.changed }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
+        fetch-depth: 1
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Combine scripts
       run: |
-        # Define the output file name
-        output_file="Automated-script-for-destined-journey .js"
+        set -e  # 遇到错误时退出
         
-        # Define the order of script files to be merged
+        # 使用环境变量中的文件名
+        output_file="${OUTPUT_FILE}"
+        
+        echo "开始合并脚本文件..."
+        echo "输出文件: $output_file"
+        
+        # 定义要合并的脚本文件顺序
         files=(
             "config.js"
             "utils.js"
@@ -32,51 +42,176 @@ jobs:
             "currency-system.js"
             "info-injection.js"
             "event-chain-system.js"
-            "Key_level.js"
             "main-controller.js"
         )
         
-        # Create or clear the output file
+        # 检查所有文件是否存在
+        for file in "${files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+                echo "错误: 文件 $file 不存在"
+                exit 1
+            fi
+            echo "✓ 找到文件: $file"
+        done
+        
+        # 清空或创建输出文件
         > "$output_file"
         
-        # Loop through the files and append their content to the output file
-        for file in "${files[@]}"
-        do
+        # 添加文件头部信息
+        echo "// ================================================================" >> "$output_file"
+        echo "// 命定之诗与黄昏之歌自动化脚本 - 自动合并版本" >> "$output_file"
+        echo "// 构建时间: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> "$output_file"
+        echo "// 包含模块: ${files[*]}" >> "$output_file"
+        echo "// ================================================================" >> "$output_file"
+        echo "" >> "$output_file"
+        
+        # 循环遍历文件数组并将它们的内容追加到输出文件
+        for file in "${files[@]}"; do
+            echo "正在合并: $file"
             echo "// ======================== [Module: ${file}] ========================" >> "$output_file"
             cat "$file" >> "$output_file"
             echo "" >> "$output_file"
             echo "" >> "$output_file"
         done
-
+        
+        echo "✓ 脚本合并完成！"
+        echo "输出文件大小: $(wc -c < "$output_file") 字节"
+    - name: Generate JSON file
+      run: |
+        echo "开始生成JSON文件..."
+        
+        # 使用 Node.js 脚本来创建 JSON 文件，这样可以更好地处理特殊字符和格式
+        node << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+        
+        try {
+          console.log('正在读取文件...');
+          
+          // 使用环境变量中的文件名
+          const outputFile = process.env.OUTPUT_FILE;
+          const jsonFile = process.env.JSON_FILE;
+          
+          // 检查文件是否存在
+          if (!fs.existsSync(outputFile)) {
+            throw new Error(`合并脚本文件不存在: ${outputFile}`);
+          }
+          
+          if (!fs.existsSync('README.md')) {
+            throw new Error('README.md 文件不存在');
+          }
+          
+          // 读取脚本和 README 文件的内容
+          console.log(`读取脚本文件: ${outputFile}`);
+          const scriptContent = fs.readFileSync(outputFile, 'utf8');
+          
+          console.log('读取README文件...');
+          const readmeContent = fs.readFileSync('README.md', 'utf8');
+          
+          // 构建 JSON 对象
+          const jsonObject = {
+            id: "03310a07-7f00-4aa9-8ad5-2259a88767f6",
+            name: "命定之诗与黄昏之歌自动化脚本",
+            content: scriptContent,
+            info: readmeContent,
+            buttons: [],
+            data: {},
+            buildTime: new Date().toISOString(),
+            version: process.env.GITHUB_SHA || 'unknown'
+          };
+          
+          // 将 JSON 对象写入文件
+          console.log(`写入JSON文件: ${jsonFile}`);
+          fs.writeFileSync(jsonFile, JSON.stringify(jsonObject, null, 2), 'utf8');
+          
+          // 输出文件信息
+          const stats = fs.statSync(jsonFile);
+          console.log(`✓ JSON文件创建成功！`);
+          console.log(`文件大小: ${stats.size} 字节`);
+          
+        } catch (error) {
+          console.error('生成JSON文件时出错:', error.message);
+          process.exit(1);
+        }
+        EOF
+        
+        echo "✓ JSON文件生成完成！"
     - name: Commit and push if changed
       id: commit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add "Automated-script-for-destined-journey .js"
+        set -e
+        
+        # 配置Git用户信息
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        echo "检查文件变更..."
+        
+        # 使用环境变量中的文件名
+        output_file="${OUTPUT_FILE}"
+        json_file="${JSON_FILE}"
+        
+        echo "待提交文件:"
+        echo "- $output_file"
+        echo "- $json_file"
+        
+        # 检查文件是否存在
+        if [[ ! -f "$output_file" ]]; then
+          echo "错误: 输出文件 $output_file 不存在"
+          exit 1
+        fi
+        
+        if [[ ! -f "$json_file" ]]; then
+          echo "错误: JSON文件 $json_file 不存在"
+          exit 1
+        fi
+        
+        # 添加文件到Git
+        git add "$output_file" "$json_file"
+        
+        # 检查是否有变更
         if git diff --staged --quiet; then
-          echo "No changes to commit."
+          echo "✓ 没有文件变更，跳过提交"
           echo "changed=false" >> $GITHUB_OUTPUT
         else
-          git commit -m "Automated build: updated Automated-script-for-destined-journey .js"
+          echo "✓ 发现文件变更，准备提交"
+          
+          # 显示变更摘要
+          git diff --staged --stat
+          
+          # 提交变更
+          commit_message="ci: 自动构建 - 更新合并脚本和JSON文件
+          
+          - 构建时间: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          - 提交哈希: ${GITHUB_SHA:0:7}
+          - 触发分支: ${GITHUB_REF#refs/heads/}"
+          
+          git commit -m "$commit_message"
           git push
+          
+          echo "✓ 文件已成功提交并推送"
           echo "changed=true" >> $GITHUB_OUTPUT
         fi
         
     - name: Upload artifact
-      # Updated from v3 to v4
       uses: actions/upload-artifact@v4
       with:
         name: merged-script-artifact
-        path: "Automated-script-for-destined-journey .js"
+        path: |
+          ${{ env.OUTPUT_FILE }}
+          ${{ env.JSON_FILE }}
 
   release:
     needs: build
     if: needs.build.outputs.changed == 'true'
     runs-on: ubuntu-latest
+    env:
+      OUTPUT_FILE: "automated-script-for-destined-journey.js"
+      JSON_FILE: "命定之诗与黄昏之歌自动化脚本.json"
     steps:
     - name: Download artifact
-      # Updated from v3 to v4
       uses: actions/download-artifact@v4
       with:
         name: merged-script-artifact
@@ -93,6 +228,21 @@ jobs:
         tag_name: ${{ steps.tag_version.outputs.new_tag }}
         name: "Release ${{ steps.tag_version.outputs.new_tag }}"
         body: |
-          Automated release of the merged script.
-          See the attached file for the latest version.
-        files: "Automated-script-for-destined-journey .js"
+          ## 🚀 自动构建发布
+          
+          这是一个自动构建的发布版本，包含合并后的脚本和JSON配置文件。
+          
+          ### 📦 发布内容
+          - **合并脚本**: `${{ env.OUTPUT_FILE }}`
+          - **JSON配置**: `${{ env.JSON_FILE }}`
+          
+          ### ⏰ 构建信息
+          - **发布时间**: ${{ steps.tag_version.outputs.new_tag }}
+          - **提交哈希**: ${{ github.sha }}
+          - **触发分支**: ${{ github.ref_name }}
+          
+          ### 📋 使用说明
+          下载附件中的文件即可使用最新版本的自动化脚本。
+        files: |
+          ${{ env.OUTPUT_FILE }}
+          ${{ env.JSON_FILE }}

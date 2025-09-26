@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-26 09:00:02 UTC
+// 构建时间: 2025-09-26 09:03:11 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js main-controller.js
 // ================================================================
 

@@ -1,7 +1,7 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-26 10:22:17 UTC
-// 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js main-controller.js
+// 构建时间: 2025-09-26 10:33:41 UTC
+// 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js main-controller.js
 // ================================================================
 
 // ======================== [Module: config.js] ========================
@@ -442,6 +442,25 @@
     }
     // 将函数暴露给全局范围
     window.event_chain = event_chain;
+})();
+
+
+// ======================== [Module: Key_level.js] ========================
+(function() {
+    'use strict';
+    function Key_level(user) {
+        if(user.状态.等级[0] >= window.GAME_CONFIG.Key_level){
+        injectPrompts([{
+            id: 'Key_level',
+            position: 'none',
+            role: 'system',
+            depth: 0,
+            content: 'user_lv>=13',
+            should_scan: true
+        }]);
+        }
+    }
+    window.Key_level = Key_level;
 })();
 
 

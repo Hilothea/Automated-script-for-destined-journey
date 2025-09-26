@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>货币系统测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .currency-display {
+            font-weight: bold;
+            color: #333;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>货币系统按需换算测试</h1>
+        
+        <div class="test-case">
+            <h3>测试用例1：PP购买，GP足够抵扣</h3>
+            <p>初始货币：PP=0, GP=200, SP=50, CP=100</p>
+            <p>扣除：PP=-1 (需要100GP抵扣)</p>
+            <button class="test-button" onclick="testCase1()">执行测试</button>
+            <div id="result1" class="result"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试用例2：PP购买，需要多级换算</h3>
+            <p>初始货币：PP=0, GP=50, SP=600, CP=200</p>
+            <p>扣除：PP=-1 (需要100GP，但只有50GP，需要SP补充)</p>
+            <button class="test-button" onclick="testCase2()">执行测试</button>
+            <div id="result2" class="result"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试用例3：货币不足，破产情况</h3>
+            <p>初始货币：PP=0, GP=10, SP=20, CP=50</p>
+            <p>扣除：PP=-2 (需要200GP，但总价值不足)</p>
+            <button class="test-button" onclick="testCase3()">执行测试</button>
+            <div id="result3" class="result"></div>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试用例4：GP购买，PP抵扣</h3>
+            <p>初始货币：PP=2, GP=0, SP=50, CP=100</p>
+            <p>扣除：GP=-150 (需要2PP部分抵扣)</p>
+            <button class="test-button" onclick="testCase4()">执行测试</button>
+            <div id="result4" class="result"></div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="currency-system.js"></script>
+    <script>
+        // 模拟injectPrompts函数用于测试
+        window.injectPrompts = function(prompts) {
+            console.log('injectPrompts调用:', prompts);
+            return prompts;
+        };
+        
+        // 模拟safeParseFloat函数
+        window.safeParseFloat = function(value) {
+            const parsed = parseFloat(value);
+            return isNaN(parsed) ? 0 : parsed;
+        };
+        
+        function displayResult(elementId, property, description) {
+            const result = document.getElementById(elementId);
+            result.innerHTML = `
+                <strong>${description}</strong><br>
+                <div class="currency-display">
+                    结果货币：PP=${property.货币.白金币[0]}, GP=${property.货币.金币[0]}, SP=${property.货币.银币[0]}, CP=${property.货币.铜币[0]}
+                </div>
+            `;
+        }
+        
+        function testCase1() {
+            const property = {
+                货币: {
+                    白金币: [-1],  // PP被扣成负数
+                    金币: [200],
+                    银币: [50],
+                    铜币: [100]
+                }
+            };
+            
+            window.CurrencySystem(property);
+            displayResult('result1', property, '预期：PP=0, GP=100, SP=50, CP=100');
+        }
+        
+        function testCase2() {
+            const property = {
+                货币: {
+                    白金币: [-1],  // PP被扣成负数
+                    金币: [50],
+                    银币: [600],
+                    铜币: [200]
+                }
+            };
+            
+            window.CurrencySystem(property);
+            displayResult('result2', property, '预期：PP=0, GP=0, SP=100, CP=200');
+        }
+        
+        function testCase3() {
+            const property = {
+                货币: {
+                    白金币: [-2],  // PP被扣成负数，需要200GP
+                    金币: [10],
+                    银币: [20],
+                    铜币: [50]
+                }
+            };
+            
+            window.CurrencySystem(property);
+            displayResult('result3', property, '预期：PP=0, GP=0, SP=0, CP=-18750(负数表示欠债)');
+        }
+        
+        function testCase4() {
+            const property = {
+                货币: {
+                    白金币: [2],
+                    金币: [-150],  // GP被扣成负数
+                    银币: [50],
+                    铜币: [100]
+                }
+            };
+            
+            window.CurrencySystem(property);
+            displayResult('result4', property, '预期：PP=0, GP=50, SP=50, CP=100');
+        }
+    </script>
+</body>
+</html>

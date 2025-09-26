@@ -7,7 +7,7 @@
             position: 'none',
             role: 'system',
             depth: 0,
-            content: 'user_lv>=60',
+            content: 'user_lv>=13',
             should_scan: true
         }]);
         }

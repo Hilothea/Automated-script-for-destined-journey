@@ -98,16 +98,16 @@ jobs:
             throw new Error(`合并脚本文件不存在: ${outputFile}`);
           }
           
-          if (!fs.existsSync('README.md')) {
-            throw new Error('README.md 文件不存在');
+          if (!fs.existsSync('DOC.md')) {
+            throw new Error('DOC.md 文件不存在');
           }
           
-          // 读取脚本和 README 文件的内容
+          // 读取脚本和 DOC 文件的内容
           console.log(`读取脚本文件: ${outputFile}`);
           const scriptContent = fs.readFileSync(outputFile, 'utf8');
           
-          console.log('读取README文件...');
-          const readmeContent = fs.readFileSync('README.md', 'utf8');
+          console.log('读取DOC文件...');
+          const readmeContent = fs.readFileSync('DOC.md', 'utf8');
           
           // 构建 JSON 对象
           const jsonObject = {

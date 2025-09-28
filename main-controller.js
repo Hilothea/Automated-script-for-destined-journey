@@ -12,7 +12,7 @@
         const world = variables?.stat_data?.世界; 
         const eventchain = variables.stat_data?.事件链;
         
-        if (!user || !property || !world ||!eventchain) {
+        if (!user || !property || !world || !eventchain) {
             console.error("Core data missing, script terminated");
             return;
         }

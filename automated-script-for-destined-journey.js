@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-26 10:49:23 UTC
+// 构建时间: 2025-09-28 07:08:01 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js main-controller.js
 // ================================================================
 
@@ -479,7 +479,7 @@
         const world = variables?.stat_data?.世界; 
         const eventchain = variables.stat_data?.事件链;
         
-        if (!user || !property || !world ||!eventchain) {
+        if (!user || !property || !world || !eventchain) {
             console.error("Core data missing, script terminated");
             return;
         }

@@ -6,13 +6,25 @@
      * @param {Object} eventchain - 事件链对象
      */
     function event_chain(eventchain) {
-        if (eventchain.开启[0] === 'true') {
+        if (eventchain.开启 === 'true') {
+            eventchain.开启 = true
+        }
+        if (eventchain.开启 === 'false') {
+            eventchain.开启 = false
+        }
+        if (eventchain.结束 === 'true') {
+            eventchain.结束 = true
+        }
+        if (eventchain.结束 === 'false') {
+            eventchain.结束 = false
+        }
+        if (eventchain.开启 === true) {
             // 清除之前的事件链注入
             uninjectPrompts(['event_chain']);
             uninjectPrompts(['event_chain_tips']);
             
-            const title = eventchain.标题[0];
-            const step = eventchain.大狗叫[0];
+            const title = eventchain.标题;
+            const step = eventchain.大狗叫;
             
             // 注入当前事件链状态
             injectPrompts([{
@@ -35,13 +47,13 @@
             }]);
             
             // 检查是否结束事件链
-            if (eventchain.结束[0] === 'true') {
+            if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
-                eventchain.标题[0] = 'null';
-                eventchain.大狗叫[0] = 'null';
-                eventchain.结束[0] = 'false';
-                eventchain.开启[0] = 'false';
+                eventchain.标题 = 'null';
+                eventchain.大狗叫 = 'null';
+                eventchain.结束 = false;
+                eventchain.开启 = false;
             }
         }
     }

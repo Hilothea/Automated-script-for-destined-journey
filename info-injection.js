@@ -9,7 +9,7 @@
         // 注入地点信息
         injectPrompts([{
             id: 'Location',
-            content: world.地点[0],
+            content: world.地点,
             position: 'none',
             depth: 0,
             role: 'system',
@@ -19,7 +19,7 @@
         // 注入时间信息
         injectPrompts([{
             id: 'Time',
-            content: world.时间[0],
+            content: world.时间,
             position: 'none',
             depth: 0,
             role: 'system',

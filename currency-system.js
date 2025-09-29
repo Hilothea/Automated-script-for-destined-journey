@@ -6,10 +6,10 @@
      * @param {Object} property - 财产对象
      */
     function CurrencySystem(property) {
-        let PP = window.safeParseFloat(property.货币.白金币[0]); 
-        let GP = window.safeParseFloat(property.货币.金币[0]);   
-        let SP = window.safeParseFloat(property.货币.银币[0]);   
-        let CP = window.safeParseFloat(property.货币.铜币[0]);   
+        let PP = window.safeParseFloat(property.货币.白金币); 
+        let GP = window.safeParseFloat(property.货币.金币);   
+        let SP = window.safeParseFloat(property.货币.银币);   
+        let CP = window.safeParseFloat(property.货币.铜币);   
         
         // 按需换算函数
         function handleCurrencyExchange() {
@@ -189,10 +189,10 @@
         }
         
         // 更新货币值
-        property.货币.白金币[0] = Math.max(0, Math.floor(PP));
-        property.货币.金币[0] = Math.max(0, Math.floor(GP));
-        property.货币.银币[0] = Math.max(0, Math.floor(SP));
-        property.货币.铜币[0] = Math.floor(CP); // CP可以为负数，表示欠债
+        property.货币.白金币 = Math.max(0, Math.floor(PP));
+        property.货币.金币 = Math.max(0, Math.floor(GP));
+        property.货币.银币 = Math.max(0, Math.floor(SP));
+        property.货币.铜币 = Math.floor(CP); // CP可以为负数，表示欠债
     }
 
     // 将函数暴露给全局范围

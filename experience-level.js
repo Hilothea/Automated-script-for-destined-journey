@@ -52,7 +52,7 @@
                 user.属性.体质[0] = window.safeParseFloat(user.属性.体质[0]) + milestone.constitution;
                 user.属性.智力[0] = window.safeParseFloat(user.属性.智力[0]) + milestone.intelligence;
                 user.属性.精神[0] = window.safeParseFloat(user.属性.精神[0]) + milestone.spirit;
-                user.状态.战力层级[0] = milestone.tier;
+                user.状态.生命层级[0] = milestone.tier;
             }
         }
         

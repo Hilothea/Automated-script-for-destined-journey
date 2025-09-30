@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-30 10:29:42 UTC
+// 构建时间: 2025-09-30 14:42:50 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js main-controller.js
 // ================================================================
 
@@ -132,7 +132,7 @@
                 user.属性.体质[0] = window.safeParseFloat(user.属性.体质[0]) + milestone.constitution;
                 user.属性.智力[0] = window.safeParseFloat(user.属性.智力[0]) + milestone.intelligence;
                 user.属性.精神[0] = window.safeParseFloat(user.属性.精神[0]) + milestone.spirit;
-                user.状态.战力层级[0] = milestone.tier;
+                user.状态.生命层级[0] = milestone.tier;
             }
         }
         

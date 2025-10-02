@@ -1,7 +1,7 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-09-30 14:42:50 UTC
-// 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js main-controller.js
+// 构建时间: 2025-10-02 20:54:09 UTC
+// 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
 // ======================== [Module: config.js] ========================
@@ -464,6 +464,26 @@
 })();
 
 
+// ======================== [Module: lock_HS.js] ========================
+(function() {
+    'use strict';
+    
+    function Lock_favorability(fatesystem) {
+        let favorability_S = fatesystem.希尔薇娅.好感度
+        let favorability_H = fatesystem.希洛西娅.好感度
+        if (favorability_S >= 40) {
+            avorability_S = 39
+            fatesystem.希尔薇娅.好感度 = avorability_S
+        }
+        if(favorability_H >= 40){
+            favorability_H = 39
+            fatesystem.希洛西娅.好感度 = favorability_H
+        }
+    }
+    window.Lock_favorability = Lock_favorability;
+})();
+
+
 // ======================== [Module: main-controller.js] ========================
 (function() {
     'use strict';
@@ -478,13 +498,15 @@
         const property = variables?.stat_data?.财产; 
         const world = variables?.stat_data?.世界; 
         const eventchain = variables.stat_data?.事件链;
+        const fatesystem = ariables.stat_data?.命运系统;
         
-        if (!user || !property || !world || !eventchain) {
+        if (!user || !property || !world || !eventchain || !fatesystem) {
             console.error("Core data missing, script terminated");
             return;
         }
         
         // 按照顺序执行模块
+        window.Lock_favorability(fatesystem);
         window.uninject();                           // 1. 解除注入
         window.experiencegrowth(user);               // 2. 经验与等级处理
         window.CurrencySystem(property);             // 3. 货币换算

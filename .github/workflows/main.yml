@@ -43,6 +43,7 @@ jobs:
             "info-injection.js"
             "event-chain-system.js"
             "Key_level.js"
+            "lock_HS.js"
             "main-controller.js"
         )
         

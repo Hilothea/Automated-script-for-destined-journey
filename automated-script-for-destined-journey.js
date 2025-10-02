@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-02 20:54:09 UTC
+// 构建时间: 2025-10-02 20:56:31 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -469,15 +469,15 @@
     'use strict';
     
     function Lock_favorability(fatesystem) {
-        let favorability_S = fatesystem.希尔薇娅.好感度
-        let favorability_H = fatesystem.希洛西娅.好感度
+        let favorability_S = fatesystem.红线对象.希尔薇娅.好感度
+        let favorability_H = fatesystem.红线对象.希洛西娅.好感度
         if (favorability_S >= 40) {
             avorability_S = 39
-            fatesystem.希尔薇娅.好感度 = avorability_S
+            fatesystem.红线对象.希尔薇娅.好感度 = avorability_S
         }
         if(favorability_H >= 40){
             favorability_H = 39
-            fatesystem.希洛西娅.好感度 = favorability_H
+            fatesystem.红线对象.希洛西娅.好感度 = favorability_H
         }
     }
     window.Lock_favorability = Lock_favorability;

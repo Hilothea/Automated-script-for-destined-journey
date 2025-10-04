@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 18:29:38 UTC
+// 构建时间: 2025-10-04 19:02:44 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -327,23 +327,9 @@
                 }
             }
             
-            return { deficit, currencyCleared };
         }
         
         // 执行按需换算
-        const result = handleCurrencyExchange();
-        
-        // 处理无法覆盖的情况
-        if (result.currencyCleared && result.deficit > 0) {
-            window.injectPrompts([{
-                id: 'currency_deficit',
-                content: `core_system:warning {{user}}货币不足,差值为${result.deficit}铜币,你需要通过红线系统助手提醒{{user}}并提醒{{user}}即使偿还`,
-                position: 'in_chat',
-                depth: 0,
-                role: 'system',
-                should_scan: true,
-            }]);
-        }
         
         // 更新货币值
         property.货币.白金币 = Math.max(0, Math.floor(PP));
@@ -401,6 +387,15 @@
      * @param {Object} eventchain - 事件链对象
      */
     function event_chain(eventchain) {
+        uninjectPrompts(['event_chain_end']);
+        injectPrompts([{
+            id: 'event_chain_end',
+            content: eventchain.已完成事件,
+            position: 'none',
+            depth: 0,
+            role: 'system',
+            should_scan: true,
+        }]);
         if (eventchain.开启 === 'true') {
             eventchain.开启 = true
         }
@@ -419,7 +414,7 @@
             uninjectPrompts(['event_chain_tips']);
             
             const title = eventchain.标题;
-            const step = eventchain.大狗叫;
+            const step = eventchain.阶段;
             
             // 注入当前事件链状态
             injectPrompts([{
@@ -434,19 +429,20 @@
             // 注入事件链激活提示
             injectPrompts([{
                 id: 'event_chain_tips',
-                content: `core_system:事件链${title}已激活,注意<event_chain>`,
+                content: `core_system:事件链已激活,注意<event_chain>`,
                 position: 'in_chat',
                 depth: 0,
                 role: 'system',
                 should_scan: true,
             }]);
+
             
             // 检查是否结束事件链
             if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
                 eventchain.标题 = 'null';
-                eventchain.大狗叫 = 'null';
+                eventchain.阶段 = 'null';
                 eventchain.结束 = false;
                 eventchain.开启 = false;
             }

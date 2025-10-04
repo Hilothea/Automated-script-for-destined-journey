@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 19:40:35 UTC
+// 构建时间: 2025-10-04 19:47:56 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -329,6 +329,7 @@
         }
         
         // 执行按需换算
+        handleCurrencyExchange();
         
         // 更新货币值
         property.货币.白金币 = Math.max(0, Math.floor(PP));
@@ -396,16 +397,16 @@
             should_scan: true,
         }]);
         if (eventchain.开启 === 'true') {
-            eventchain.开启 = true
+            eventchain.开启 = true;
         }
         if (eventchain.开启 === 'false') {
-            eventchain.开启 = false
+            eventchain.开启 = false;
         }
         if (eventchain.结束 === 'true') {
-            eventchain.结束 = true
+            eventchain.结束 = true;
         }
         if (eventchain.结束 === 'false') {
-            eventchain.结束 = false
+            eventchain.结束 = false;
         }
         if (eventchain.开启 === true) {
             // 清除之前的事件链注入
@@ -452,7 +453,7 @@
         uninjectPrompts(['event_chain']);
         uninjectPrompts(['event_chain_tips']);
         const title = eventchain.标题;
-        eventchain.已完成事件.push(`已完成事件${title}`)
+        eventchain.已完成事件.push(`已完成事件${title}`);
         eventchain.标题 = 'null';
         eventchain.阶段 = 'null';
         eventchain.结束 = false;

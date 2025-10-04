@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     function Key_level(user) {
-        if(user.状态.等级[0] >= window.GAME_CONFIG.Key_level){
+        if(user.状态.等级 >= window.GAME_CONFIG.Key_level){
         injectPrompts([{
             id: 'Key_level',
             position: 'none',

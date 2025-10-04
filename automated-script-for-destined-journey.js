@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 19:02:44 UTC
+// 构建时间: 2025-10-04 19:05:30 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -62,7 +62,6 @@
     function uninject() {
         const idsToRemove = [
             'AP+',
-            'currency_deficit',
             'Location',
             'Time',
             'LV+',

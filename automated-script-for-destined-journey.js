@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 20:43:26 UTC
+// 构建时间: 2025-10-04 21:52:25 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -441,27 +441,16 @@
             if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
-                eventchain.标题 = 'null';
-                eventchain.阶段 = 'null';
+                eventchain.已完成事件.push(`已完成事件${title}`);
+                eventchain.标题 = '';
+                eventchain.阶段 = '';
                 eventchain.结束 = false;
                 eventchain.开启 = false;
             }
         }
     }
-    function event_chain_end(variables) {
-        const eventchain = variables.stat_data?.事件链;
-        uninjectPrompts(['event_chain']);
-        uninjectPrompts(['event_chain_tips']);
-        const title = eventchain.标题;
-        eventchain.已完成事件.push(`已完成事件${title}`);
-        eventchain.标题 = 'null';
-        eventchain.阶段 = 'null';
-        eventchain.结束 = false;
-        eventchain.开启 = false;
-    }
     // 将函数暴露给全局范围
     window.event_chain = event_chain;
-    window.event_chain_end = event_chain_end;
 })();
 
 

@@ -173,6 +173,7 @@
         }
         
         // 执行按需换算
+        handleCurrencyExchange();
         
         // 更新货币值
         property.货币.白金币 = Math.max(0, Math.floor(PP));

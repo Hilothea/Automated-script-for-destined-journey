@@ -16,16 +16,16 @@
             should_scan: true,
         }]);
         if (eventchain.开启 === 'true') {
-            eventchain.开启 = true
+            eventchain.开启 = true;
         }
         if (eventchain.开启 === 'false') {
-            eventchain.开启 = false
+            eventchain.开启 = false;
         }
         if (eventchain.结束 === 'true') {
-            eventchain.结束 = true
+            eventchain.结束 = true;
         }
         if (eventchain.结束 === 'false') {
-            eventchain.结束 = false
+            eventchain.结束 = false;
         }
         if (eventchain.开启 === true) {
             // 清除之前的事件链注入
@@ -72,7 +72,7 @@
         uninjectPrompts(['event_chain']);
         uninjectPrompts(['event_chain_tips']);
         const title = eventchain.标题;
-        eventchain.已完成事件.push(`已完成事件${title}`)
+        eventchain.已完成事件.push(`已完成事件${title}`);
         eventchain.标题 = 'null';
         eventchain.阶段 = 'null';
         eventchain.结束 = false;

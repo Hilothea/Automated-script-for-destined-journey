@@ -18,7 +18,6 @@
     function uninject() {
         const idsToRemove = [
             'AP+',
-            'currency_deficit',
             'Location',
             'Time',
             'LV+',

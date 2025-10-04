@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 17:29:42 UTC
+// 构建时间: 2025-10-04 18:29:38 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -484,8 +484,8 @@
         let favorability_S = fatesystem.红线对象.希尔薇娅.好感度
         let favorability_H = fatesystem.红线对象.希洛西娅.好感度
         if (favorability_S >= 40) {
-            avorability_S = 39
-            fatesystem.红线对象.希尔薇娅.好感度 = avorability_S
+            favorability_S = 39
+            fatesystem.红线对象.希尔薇娅.好感度 = favorability_S
         }
         if(favorability_H >= 40){
             favorability_H = 39
@@ -510,7 +510,7 @@
         const property = variables?.stat_data?.财产; 
         const world = variables?.stat_data?.世界; 
         const eventchain = variables.stat_data?.事件链;
-        const fatesystem = ariables.stat_data?.命运系统;
+        const fatesystem = variables.stat_data?.命运系统;
         
         if (!user || !property || !world || !eventchain || !fatesystem) {
             console.error("Core data missing, script terminated");

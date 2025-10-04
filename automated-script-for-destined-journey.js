@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-02 20:56:31 UTC
+// 构建时间: 2025-10-04 17:29:42 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -87,33 +87,33 @@
      */
     function experiencegrowth(user) {
         // 校准升级所需经验
-        user.状态.升级所需经验[0] = window.JOB_LEVEL_XP_TABLE[user.状态.等级[0]];
+        user.状态.升级所需经验 = window.JOB_LEVEL_XP_TABLE[user.状态.等级];
         
-        const currentLevel = user.状态.等级[0];
+        const currentLevel = user.状态.等级;
         
         // 确保累计经验值不低于前一级的要求
         if (currentLevel > 0) {
             const requiredXpForPreviousLevel = window.JOB_LEVEL_XP_TABLE[currentLevel - 1];
-            if (window.safeParseFloat(user.状态.累计经验值[0]) < requiredXpForPreviousLevel) {
-                user.状态.累计经验值[0] = requiredXpForPreviousLevel;
+            if (window.safeParseFloat(user.状态.累计经验值) < requiredXpForPreviousLevel) {
+                user.状态.累计经验值 = requiredXpForPreviousLevel;
             }
         }
         
         let hasLeveledUp = false;
         
         // 升级处理循环
-        while (window.safeParseFloat(user.状态.累计经验值[0]) >= window.safeParseFloat(user.状态.升级所需经验[0])) {
-            if (!window.JOB_LEVEL_XP_TABLE[user.状态.等级[0]]) { 
+        while (window.safeParseFloat(user.状态.累计经验值) >= window.safeParseFloat(user.状态.升级所需经验)) {
+            if (!window.JOB_LEVEL_XP_TABLE[user.状态.等级]) { 
                 break; 
             }
             
-            user.状态.等级[0] = window.safeParseFloat(user.状态.等级[0]) + 1;
+            user.状态.等级 = window.safeParseFloat(user.状态.等级) + 1;
             hasLeveledUp = true;
-            user.状态.升级所需经验[0] = window.JOB_LEVEL_XP_TABLE[user.状态.等级[0]];
+            user.状态.升级所需经验 = window.JOB_LEVEL_XP_TABLE[user.状态.等级];
             
             // 检查是否获得属性点
-            if (user.状态.等级[0] % window.GAME_CONFIG.AP_Acquisition_Level === 0) {
-                user.属性.属性点[0] = window.safeParseFloat(user.属性.属性点[0]) + 1;
+            if (user.状态.等级 % window.GAME_CONFIG.AP_Acquisition_Level === 0) {
+                user.属性.属性点 = window.safeParseFloat(user.属性.属性点) + 1;
                 injectPrompts([{
                     id: 'AP+',
                     position: 'in_chat',
@@ -125,14 +125,14 @@
             }
             
             // 检查里程碑等级
-            const milestone = window.MILESTONE_LEVELS[user.状态.等级[0]];
+            const milestone = window.MILESTONE_LEVELS[user.状态.等级];
             if (milestone) {
-                user.属性.力量[0] = window.safeParseFloat(user.属性.力量[0]) + milestone.strength;
-                user.属性.敏捷[0] = window.safeParseFloat(user.属性.敏捷[0]) + milestone.agility;
-                user.属性.体质[0] = window.safeParseFloat(user.属性.体质[0]) + milestone.constitution;
-                user.属性.智力[0] = window.safeParseFloat(user.属性.智力[0]) + milestone.intelligence;
-                user.属性.精神[0] = window.safeParseFloat(user.属性.精神[0]) + milestone.spirit;
-                user.状态.生命层级[0] = milestone.tier;
+                user.属性.力量 = window.safeParseFloat(user.属性.力量) + milestone.strength;
+                user.属性.敏捷 = window.safeParseFloat(user.属性.敏捷) + milestone.agility;
+                user.属性.体质 = window.safeParseFloat(user.属性.体质) + milestone.constitution;
+                user.属性.智力 = window.safeParseFloat(user.属性.智力) + milestone.intelligence;
+                user.属性.精神 = window.safeParseFloat(user.属性.精神) + milestone.spirit;
+                user.状态.生命层级 = milestone.tier;
             }
         }
         
@@ -143,7 +143,7 @@
                 position: 'in_chat',
                 role: 'system',
                 depth: 0,
-                content: `core_system: The {{user}} level increased from ${currentLevel} to ${user.状态.等级[0]}`,
+                content: `core_system: The {{user}} level increased from ${currentLevel} to ${user.状态.等级}`,
                 should_scan: true
             }]);
         }
@@ -163,10 +163,10 @@
      * @param {Object} property - 财产对象
      */
     function CurrencySystem(property) {
-        let PP = window.safeParseFloat(property.货币.白金币[0]); 
-        let GP = window.safeParseFloat(property.货币.金币[0]);   
-        let SP = window.safeParseFloat(property.货币.银币[0]);   
-        let CP = window.safeParseFloat(property.货币.铜币[0]);   
+        let PP = window.safeParseFloat(property.货币.白金币); 
+        let GP = window.safeParseFloat(property.货币.金币);   
+        let SP = window.safeParseFloat(property.货币.银币);   
+        let CP = window.safeParseFloat(property.货币.铜币);   
         
         // 按需换算函数
         function handleCurrencyExchange() {
@@ -346,10 +346,10 @@
         }
         
         // 更新货币值
-        property.货币.白金币[0] = Math.max(0, Math.floor(PP));
-        property.货币.金币[0] = Math.max(0, Math.floor(GP));
-        property.货币.银币[0] = Math.max(0, Math.floor(SP));
-        property.货币.铜币[0] = Math.floor(CP); // CP可以为负数，表示欠债
+        property.货币.白金币 = Math.max(0, Math.floor(PP));
+        property.货币.金币 = Math.max(0, Math.floor(GP));
+        property.货币.银币 = Math.max(0, Math.floor(SP));
+        property.货币.铜币 = Math.floor(CP); // CP可以为负数，表示欠债
     }
 
     // 将函数暴露给全局范围
@@ -369,7 +369,7 @@
         // 注入地点信息
         injectPrompts([{
             id: 'Location',
-            content: world.地点[0],
+            content: world.地点,
             position: 'none',
             depth: 0,
             role: 'system',
@@ -379,7 +379,7 @@
         // 注入时间信息
         injectPrompts([{
             id: 'Time',
-            content: world.时间[0],
+            content: world.时间,
             position: 'none',
             depth: 0,
             role: 'system',
@@ -401,13 +401,25 @@
      * @param {Object} eventchain - 事件链对象
      */
     function event_chain(eventchain) {
-        if (eventchain.开启[0] === 'true') {
+        if (eventchain.开启 === 'true') {
+            eventchain.开启 = true
+        }
+        if (eventchain.开启 === 'false') {
+            eventchain.开启 = false
+        }
+        if (eventchain.结束 === 'true') {
+            eventchain.结束 = true
+        }
+        if (eventchain.结束 === 'false') {
+            eventchain.结束 = false
+        }
+        if (eventchain.开启 === true) {
             // 清除之前的事件链注入
             uninjectPrompts(['event_chain']);
             uninjectPrompts(['event_chain_tips']);
             
-            const title = eventchain.标题[0];
-            const step = eventchain.大狗叫[0];
+            const title = eventchain.标题;
+            const step = eventchain.大狗叫;
             
             // 注入当前事件链状态
             injectPrompts([{
@@ -430,13 +442,13 @@
             }]);
             
             // 检查是否结束事件链
-            if (eventchain.结束[0] === 'true') {
+            if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
-                eventchain.标题[0] = 'null';
-                eventchain.大狗叫[0] = 'null';
-                eventchain.结束[0] = 'false';
-                eventchain.开启[0] = 'false';
+                eventchain.标题 = 'null';
+                eventchain.大狗叫 = 'null';
+                eventchain.结束 = false;
+                eventchain.开启 = false;
             }
         }
     }
@@ -449,7 +461,7 @@
 (function() {
     'use strict';
     function Key_level(user) {
-        if(user.状态.等级[0] >= window.GAME_CONFIG.Key_level){
+        if(user.状态.等级 >= window.GAME_CONFIG.Key_level){
         injectPrompts([{
             id: 'Key_level',
             position: 'none',

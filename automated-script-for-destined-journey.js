@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-04 19:47:56 UTC
+// 构建时间: 2025-10-04 20:30:05 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -489,18 +489,30 @@
     'use strict';
     
     function Lock_favorability(fatesystem) {
-        let favorability_S = fatesystem.红线对象.希尔薇娅.好感度
-        let favorability_H = fatesystem.红线对象.希洛西娅.好感度
-        if (favorability_S >= 40) {
-            favorability_S = 39
-            fatesystem.红线对象.希尔薇娅.好感度 = favorability_S
+        if (!fatesystem.红线对象.希洛西娅 || 
+            typeof fatesystem.红线对象.希洛西娅.好感度 === 'undefined') {
+        } else {
+            // 希洛西娅好感度存在，执行锁定逻辑
+            let favorability_H = fatesystem.红线对象.希洛西娅.好感度;
+            if (favorability_H >= 40) {
+                favorability_H = 39;
+                fatesystem.红线对象.希洛西娅.好感度 = favorability_H;
+            }
         }
-        if(favorability_H >= 40){
-            favorability_H = 39
-            fatesystem.红线对象.希洛西娅.好感度 = favorability_H
+        if (!fatesystem.红线对象.希尔薇娅 || 
+            typeof fatesystem.红线对象.希尔薇娅.好感度 === 'undefined') {
+        } else {
+            // 希尔薇娅好感度存在，执行锁定逻辑
+            let favorability_S = fatesystem.红线对象.希尔薇娅.好感度;
+            if (favorability_S >= 40) {
+                favorability_S = 39;
+                fatesystem.红线对象.希尔薇娅.好感度 = favorability_S;
+            }
         }
     }
-    window.Lock_favorability = Lock_favorability;
+
+window.Lock_favorability = Lock_favorability;
+
 })();
 
 

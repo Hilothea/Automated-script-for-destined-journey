@@ -37,4 +37,5 @@
     
     // 监听按钮事件
     eventOnButton('重新处理变量', Main_processes);
+    eventOnButton('退出当前事件链', window.event_chain_end);
 })();

@@ -170,23 +170,9 @@
                 }
             }
             
-            return { deficit, currencyCleared };
         }
         
         // 执行按需换算
-        const result = handleCurrencyExchange();
-        
-        // 处理无法覆盖的情况
-        if (result.currencyCleared && result.deficit > 0) {
-            window.injectPrompts([{
-                id: 'currency_deficit',
-                content: `core_system:warning {{user}}货币不足,差值为${result.deficit}铜币,你需要通过红线系统助手提醒{{user}}并提醒{{user}}即使偿还`,
-                position: 'in_chat',
-                depth: 0,
-                role: 'system',
-                should_scan: true,
-            }]);
-        }
         
         // 更新货币值
         property.货币.白金币 = Math.max(0, Math.floor(PP));

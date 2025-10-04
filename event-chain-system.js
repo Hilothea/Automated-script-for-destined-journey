@@ -6,6 +6,15 @@
      * @param {Object} eventchain - 事件链对象
      */
     function event_chain(eventchain) {
+        uninjectPrompts(['event_chain_end']);
+        injectPrompts([{
+            id: 'event_chain_end',
+            content: eventchain.已完成事件,
+            position: 'none',
+            depth: 0,
+            role: 'system',
+            should_scan: true,
+        }]);
         if (eventchain.开启 === 'true') {
             eventchain.开启 = true
         }
@@ -24,7 +33,7 @@
             uninjectPrompts(['event_chain_tips']);
             
             const title = eventchain.标题;
-            const step = eventchain.大狗叫;
+            const step = eventchain.阶段;
             
             // 注入当前事件链状态
             injectPrompts([{
@@ -39,19 +48,20 @@
             // 注入事件链激活提示
             injectPrompts([{
                 id: 'event_chain_tips',
-                content: `core_system:事件链${title}已激活,注意<event_chain>`,
+                content: `core_system:事件链已激活,注意<event_chain>`,
                 position: 'in_chat',
                 depth: 0,
                 role: 'system',
                 should_scan: true,
             }]);
+
             
             // 检查是否结束事件链
             if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
                 eventchain.标题 = 'null';
-                eventchain.大狗叫 = 'null';
+                eventchain.阶段 = 'null';
                 eventchain.结束 = false;
                 eventchain.开启 = false;
             }

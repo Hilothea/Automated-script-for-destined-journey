@@ -11,7 +11,7 @@
         const property = variables?.stat_data?.财产; 
         const world = variables?.stat_data?.世界; 
         const eventchain = variables.stat_data?.事件链;
-        const fatesystem = ariables.stat_data?.命运系统;
+        const fatesystem = variables.stat_data?.命运系统;
         
         if (!user || !property || !world || !eventchain || !fatesystem) {
             console.error("Core data missing, script terminated");

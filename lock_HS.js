@@ -5,7 +5,6 @@
         if (!fatesystem.红线对象.希洛西娅 || 
             typeof fatesystem.红线对象.希洛西娅.好感度 === 'undefined') {
         } else {
-            // 希洛西娅好感度存在，执行锁定逻辑
             let favorability_H = fatesystem.红线对象.希洛西娅.好感度;
             if (favorability_H >= 40) {
                 favorability_H = 39;
@@ -15,7 +14,6 @@
         if (!fatesystem.红线对象.希尔薇娅 || 
             typeof fatesystem.红线对象.希尔薇娅.好感度 === 'undefined') {
         } else {
-            // 希尔薇娅好感度存在，执行锁定逻辑
             let favorability_S = fatesystem.红线对象.希尔薇娅.好感度;
             if (favorability_S >= 40) {
                 favorability_S = 39;

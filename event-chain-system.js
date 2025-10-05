@@ -54,10 +54,10 @@
                 role: 'system',
                 should_scan: true,
             }]);
-
+        }
             
             // 检查是否结束事件链
-            if (eventchain.结束 === true) {
+        if (eventchain.结束 === true) {
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
                 eventchain.已完成事件.push(`已完成事件${title}`);
@@ -65,8 +65,8 @@
                 eventchain.阶段 = '';
                 eventchain.结束 = false;
                 eventchain.开启 = false;
-            }
         }
+        
     }
     // 将函数暴露给全局范围
     window.event_chain = event_chain;

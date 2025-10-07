@@ -24,7 +24,7 @@
         window.experiencegrowth(user);               // 2. 经验与等级处理
         window.CurrencySystem(property);             // 3. 货币换算
         window.inforead(world);                      // 4. 信息读取与注入
-        window.event_chain(eventchain);              // 6. 事件链处理
+        window.event_chain(eventchain,world);              // 6. 事件链处理
         window.Key_level(user);                      //7.关键等级检测
     }
 

@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-05 06:59:12 UTC
+// 构建时间: 2025-10-07 08:56:06 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -386,7 +386,7 @@
      * 事件链处理模块
      * @param {Object} eventchain - 事件链对象
      */
-    function event_chain(eventchain) {
+    function event_chain(eventchain,world) {
         uninjectPrompts(['event_chain_end']);
         injectPrompts([{
             id: 'event_chain_end',
@@ -409,6 +409,7 @@
             eventchain.结束 = false;
         }
         if (eventchain.开启 === true) {
+            localStorage.setItem("event_chain_time", `${world.时间}`);
             // 清除之前的事件链注入
             uninjectPrompts(['event_chain']);
             uninjectPrompts(['event_chain_tips']);
@@ -436,9 +437,14 @@
                 should_scan: true,
             }]);
         }
-            
-            // 检查是否结束事件链
+        // 检查是否结束事件链
         if (eventchain.结束 === true) {
+            const title = eventchain.标题;
+            const step = eventchain.阶段;
+            if(eventchain.琥珀事件 === true){
+                let time = localStorage.getItem("event_chain_time");
+                world.时间 = time;
+            }
                 uninjectPrompts(['event_chain']);
                 uninjectPrompts(['event_chain_tips']);
                 eventchain.已完成事件.push(`已完成事件${title}`);
@@ -446,6 +452,8 @@
                 eventchain.阶段 = '';
                 eventchain.结束 = false;
                 eventchain.开启 = false;
+                eventchain.琥珀事件 = false;
+                localStorage.removeItem("event_chain_time");
         }
         
     }
@@ -530,7 +538,7 @@ window.Lock_favorability = Lock_favorability;
         window.experiencegrowth(user);               // 2. 经验与等级处理
         window.CurrencySystem(property);             // 3. 货币换算
         window.inforead(world);                      // 4. 信息读取与注入
-        window.event_chain(eventchain);              // 6. 事件链处理
+        window.event_chain(eventchain,world);              // 6. 事件链处理
         window.Key_level(user);                      //7.关键等级检测
     }
 

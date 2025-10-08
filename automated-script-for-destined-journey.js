@@ -1,6 +1,6 @@
 // ================================================================
 // 命定之诗与黄昏之歌自动化脚本 - 自动合并版本
-// 构建时间: 2025-10-07 08:56:06 UTC
+// 构建时间: 2025-10-08 17:03:45 UTC
 // 包含模块: config.js utils.js experience-level.js currency-system.js info-injection.js event-chain-system.js Key_level.js lock_HS.js main-controller.js
 // ================================================================
 
@@ -407,6 +407,12 @@
         }
         if (eventchain.结束 === 'false') {
             eventchain.结束 = false;
+        }
+        if (eventchain.琥珀事件 === 'true') {
+            eventchain.琥珀事件 = true;
+        }
+        if (eventchain.琥珀事件 === 'false') {
+            eventchain.琥珀事件 = false;
         }
         if (eventchain.开启 === true) {
             localStorage.setItem("event_chain_time", `${world.时间}`);

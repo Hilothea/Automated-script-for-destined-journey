@@ -27,6 +27,12 @@
         if (eventchain.结束 === 'false') {
             eventchain.结束 = false;
         }
+        if (eventchain.琥珀事件 === 'true') {
+            eventchain.琥珀事件 = true;
+        }
+        if (eventchain.琥珀事件 === 'false') {
+            eventchain.琥珀事件 = false;
+        }
         if (eventchain.开启 === true) {
             localStorage.setItem("event_chain_time", `${world.时间}`);
             // 清除之前的事件链注入

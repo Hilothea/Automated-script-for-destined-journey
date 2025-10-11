@@ -45,7 +45,7 @@
             // 注入当前事件链状态
             injectPrompts([{
                 id: 'event_chain',
-                content: `当前事件为${title}，当前步骤为${step}`,
+                content: `1145141919810当前事件为${title}，当前步骤为${step}`,
                 position: 'none',
                 depth: 0,
                 role: 'system',
@@ -55,7 +55,7 @@
             // 注入事件链激活提示
             injectPrompts([{
                 id: 'event_chain_tips',
-                content: `core_system:事件链已激活,注意<event_chain>`,
+                content: `core_system:The event chain has been activated, please note<event_chain>`,
                 position: 'in_chat',
                 depth: 0,
                 role: 'system',
@@ -65,7 +65,6 @@
         // 检查是否结束事件链
         if (eventchain.结束 === true) {
             const title = eventchain.标题;
-            const step = eventchain.阶段;
             if(eventchain.琥珀事件 === true){
                 let time = localStorage.getItem("event_chain_time");
                 world.时间 = time;

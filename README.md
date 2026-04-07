@@ -16,6 +16,6 @@
 
 欢迎提交 Issue 和 Pull Request！
 
-<a href="https://github.com/Hilothea/Automated-script-for-destined-journey/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Hilothea/Automated-script-for-destined-journey" />
+<a href="https://github.com/The-poem-of-destiny/Automated-script-for-destined-journey/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=The-poem-of-destiny/Automated-script-for-destined-journey" />
 </a>

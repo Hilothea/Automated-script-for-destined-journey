@@ -64,6 +64,6 @@ export const injectLevelPrompts = (variables: MessageVariables): void => {
   // 清理升级数据，确保提示只出现一次
   insertOrAssignVariables(
     { date: { levelUpCharacter: null, levelUpNpcs: null } },
-    { type: 'message', message_id: -2 }
+    { type: 'message', message_id: -1 }
   );
 };

@@ -94,6 +94,38 @@ export const isMaxLevel = (target_level: number): boolean => {
   return target_level >= GameConfig.MaxLevel;
 };
 
+/** HP 乘数表 - 各生命层级对应的 HP 乘数 */
+export const HpMultipliers: Readonly<Record<string, number>> = {
+  '第一层级/普通': 1,
+  '第二层级/中坚': 2,
+  '第三层级/精英': 4,
+  '第四层级/史诗': 10,
+  '第五层级/传说': 20,
+  '第六层级/神话': 40,
+  '第七层级/登神': 100,
+} as const;
+
+/** MP/SP 乘数表 - 各生命层级对应的 MP/SP 乘数 */
+export const MpSpMultipliers: Readonly<Record<string, number>> = {
+  '第一层级/普通': 1,
+  '第二层级/中坚': 2.5,
+  '第三层级/精英': 6,
+  '第四层级/史诗': 15,
+  '第五层级/传说': 35,
+  '第六层级/神话': 80,
+  '第七层级/登神': 160,
+} as const;
+
+/** 获取指定生命层级的 HP 乘数 */
+export const getHpMultiplier = (tier: string): number => {
+  return HpMultipliers[tier] ?? HpMultipliers['第一层级/普通'];
+};
+
+/** 获取指定生命层级的 MP/SP 乘数 */
+export const getMpSpMultiplier = (tier: string): number => {
+  return MpSpMultipliers[tier] ?? MpSpMultipliers['第一层级/普通'];
+};
+
 /** 获取所有里程碑等级（降序排列） */
 export const getMilestoneLevelsDesc = (): number[] => {
   return _.chain(MilestoneLevels).keys().map(Number).sortBy().reverse().value();

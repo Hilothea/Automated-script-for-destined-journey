@@ -7,6 +7,22 @@ import {
   TaskSchema,
 } from './utils';
 
+const assets = z
+  .record(
+    z.string(),
+    z
+      .object({
+        品质: z.string().prefault(''),
+        类型: z.string().prefault(''),
+        结算: z.string().prefault(''),
+        标签: z.array(z.string()).prefault([]).transform(_.uniq),
+        效果: z.record(z.string(), z.string()).prefault({}),
+        描述: z.string().prefault(''),
+      })
+      .prefault({}),
+  )
+  .prefault({});
+
 /**
  * 玩家信息
  */
@@ -27,6 +43,7 @@ const player = z
       .record(z.string(), InventoryItemSchema)
       .prefault({})
       .transform(items => _.pickBy(items, item => item.数量 > 0)),
+    资产: assets,
     金钱: z.coerce.number().prefault(0).transform(Math.round),
     状态效果: z.record(z.string(), StatusEffectSchema).prefault({}),
   })
@@ -67,6 +84,7 @@ const player = z
       // 物品与金钱
       '金钱',
       '背包',
+      '资产',
       // 装备、技能、登神长阶
       '装备',
       '技能',
@@ -88,6 +106,12 @@ const partners = z
         喜爱: z.string().prefault(''),
         外貌: z.string().prefault(''),
         着装: z.string().prefault(''),
+        生命值: z.coerce.number().prefault(0),
+        生命值上限: z.coerce.number().prefault(0),
+        法力值: z.coerce.number().prefault(0),
+        法力值上限: z.coerce.number().prefault(0),
+        体力值: z.coerce.number().prefault(0),
+        体力值上限: z.coerce.number().prefault(0),
         命定契约: z.boolean().prefault(false),
         好感度: clampedMum(0, -100, 100),
         状态效果: z.record(z.string(), StatusEffectSchema).prefault({}),
@@ -95,12 +119,20 @@ const partners = z
           .record(z.string(), InventoryItemSchema)
           .prefault({})
           .transform(items => _.pickBy(items, item => item.数量 > 0)),
+        资产: assets,
         心里话: z.string().prefault(''),
         背景故事: z.string().prefault(''),
       })
       .prefault({})
-      .transform(data =>
-        _.pick(data, [
+      .transform(data => {
+        const processed = {
+          ...data,
+          生命值: _.clamp(data.生命值, 0, data.生命值上限),
+          法力值: _.clamp(data.法力值, 0, data.法力值上限),
+          体力值: _.clamp(data.体力值, 0, data.体力值上限),
+        };
+
+        return _.pick(processed, [
           // 状态信息
           '在场',
           // 基础信息
@@ -115,11 +147,19 @@ const partners = z
           '着装',
           // 等级
           '等级',
+          // 资源值
+          '生命值上限',
+          '生命值',
+          '法力值上限',
+          '法力值',
+          '体力值上限',
+          '体力值',
           // 属性
           '属性',
           '状态效果',
           // 物品
           '背包',
+          '资产',
           // 装备、技能、登神长阶
           '装备',
           '技能',
@@ -130,8 +170,8 @@ const partners = z
           // 故事信息
           '心里话',
           '背景故事',
-        ])
-      )
+        ]);
+      }),
   )
   .prefault({});
 

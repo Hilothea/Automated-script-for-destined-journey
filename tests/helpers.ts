@@ -25,6 +25,7 @@ export const buildVariables = (overrides: DeepPartial<MessageVariables> = {}): M
         属性点: 0,
         金钱: 0,
         背包: {},
+        资产: {},
         状态效果: {},
         种族: '',
         身份: [],

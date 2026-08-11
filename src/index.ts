@@ -13,6 +13,7 @@ import { processEvent } from './services/event';
 import { processExperienceAndLevel } from './services/experience';
 import { maintainCharacterData } from './services/maintain';
 import { processNPCExperienceAndLevel } from './services/npc-experience';
+import { calculateResourceLimits } from './services/resource-calculator';
 
 // Injection
 import { injectEventPrompts } from './injection/event-prompts';
@@ -70,6 +71,7 @@ const handleVariableUpdate = (data: Mvu.MvuData, data_before_update: Mvu.MvuData
   maintainCharacterData(current, old);
   processExperienceAndLevel(current, old);
   processNPCExperienceAndLevel(current, old);
+  calculateResourceLimits(current);
   const shouldDeleteEventCache = processEvent(current);
   logSystem(current, old);
 
@@ -108,7 +110,6 @@ const init = async (): Promise<void> => {
   eventOn(getButtonEvent('查看成就'), achievement);
   console.log("[命定之诗] 脚本已加载 ฅ'ω'ฅ");
   toastr.success("[命定之诗] 脚本已加载 ฅ'ω'ฅ");
-  eventEmit('[命定之诗] 脚本已加载');
 };
 
 // 使用 jQuery 的 ready 事件启动

@@ -38,7 +38,7 @@ const player = z
     法力值上限: z.coerce.number().prefault(0),
     体力值: z.coerce.number().prefault(0),
     体力值上限: z.coerce.number().prefault(0),
-    属性点: z.coerce.number().prefault(0),
+    属性点: z.coerce.number().int().prefault(0),
     背包: z
       .record(z.string(), InventoryItemSchema)
       .prefault({})
@@ -102,6 +102,7 @@ const partners = z
       .object({
         ...IdentitySchema.shape,
         在场: z.boolean().prefault(false),
+        标签: z.array(z.string()).prefault([]).transform(_.uniq),
         性格: z.string().prefault(''),
         喜爱: z.string().prefault(''),
         外貌: z.string().prefault(''),
@@ -135,6 +136,8 @@ const partners = z
         return _.pick(processed, [
           // 状态信息
           '在场',
+          // 用户管理标签
+          '标签',
           // 基础信息
           '种族',
           '身份',

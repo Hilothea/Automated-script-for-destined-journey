@@ -223,6 +223,9 @@ declare function stopGenerationById(generation_id: string): boolean;
 declare function stopAllGeneration(): boolean;
 
 type GenerateConfig = {
+  /** 要使用的预设名称, 默认为当前加载的预设 `'in_use'`; 若设置, 则会用所选预设的提示词及参数, 但不会使用所选预设的正则、酒馆助手脚本 */
+  preset_name?: 'in_use' | string;
+
   /**
    * 请求生成的唯一标识符, 不设置则默认生成一个随机标识符.
    *
@@ -310,19 +313,19 @@ type GenerateConfig = {
 type GenerateRawConfig = GenerateConfig & {
   /**
    * 一个提示词数组, 数组元素将会按顺序发给 AI, 因而相当于自定义预设. 该数组允许存放两种类型:
-   * - `BuiltinPrompt`: 内置提示词. 由于不使用预设, 如果需要 "角色描述" 等提示词, 你需要自己指定要用哪些并给出顺序
-   *                      如果不想自己指定, 可通过 `builtin_prompt_default_order` 得到酒馆默认预设所使用的顺序 (但对于这种情况, 也许你更应该用 `generate`).
+   * - `PlaceholderPrompt`: 内置提示词. 由于不使用预设, 如果需要 "角色描述" 等提示词, 你需要自己指定要用哪些并给出顺序
+   *                        如果不想自己指定, 可通过 `placeholder_prompt_default_order` 得到酒馆默认预设所使用的顺序 (但对于这种情况, 也许你更应该用 `generate`).
    * - `RolePrompt`: 要额外给定的提示词.
    */
-  ordered_prompts?: (BuiltinPrompt | RolePrompt)[];
+  ordered_prompts?: (PlaceholderPrompt | RolePrompt)[];
 };
 
 /**
  * 预设为内置提示词设置的默认顺序
  */
-declare const builtin_prompt_default_order: BuiltinPrompt[];
+declare const placeholder_prompt_default_order: PlaceholderPrompt[];
 
-type BuiltinPrompt =
+type PlaceholderPrompt =
   | 'world_info_before'
   | 'persona_description'
   | 'char_description'
@@ -396,6 +399,13 @@ type CustomApiConfig = {
   presence_penalty?: 'same_as_preset' | 'unset' | number;
   top_p?: 'same_as_preset' | 'unset' | number;
   top_k?: 'same_as_preset' | 'unset' | number;
+
+  /** 仅 `source === 'custom'` 时有效, 在请求体中额外覆盖参数; 如 `{ max_tokens: 1024 }` */
+  custom_include_body?: Record<string, any>;
+  /** 仅 `source === 'custom'` 时有效, 在请求体中排除参数, 由于酒馆后端限制仅能排除根参数; 如 `['max_tokens']` */
+  custom_exclude_body?: string[];
+  /** 仅 `source === 'custom'` 时有效, 在请求头中额外覆盖参数; 如 `{ Content-Type: 'application/json' }` */
+  custom_include_headers?: Record<string, any>;
 };
 
 /**
@@ -506,3 +516,22 @@ type GenerateToolCallResult = {
    */
   reasoning_signature?: string;
 };
+
+//----------------------------------------------------------------------------------------------------------------------
+/**
+ * 预设为内置提示词设置的默认顺序
+ * @deprecated 请使用 `placeholder_prompt_default_order`
+ */
+declare const builtin_prompt_default_order: PlaceholderPrompt[];
+
+/** @deprecated 请使用 `PlaceholderPrompt` */
+type BuiltinPrompt =
+  | 'world_info_before'
+  | 'persona_description'
+  | 'char_description'
+  | 'char_personality'
+  | 'scenario'
+  | 'world_info_after'
+  | 'dialogue_examples'
+  | 'chat_history'
+  | 'user_input';

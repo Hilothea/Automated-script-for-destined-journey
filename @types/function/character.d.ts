@@ -26,11 +26,25 @@ type Character = {
 declare function getCharacterNames(): string[];
 
 /**
+ * 获取角色卡头像 id 列表
+ *
+ * @returns 角色卡头像 id 列表
+ */
+declare function getCharacterIds(): string[];
+
+/**
  * 获取当前角色卡名称
  *
  * @returns 当前角色卡名称, 如果当前没有角色卡, 则返回 `null`
  */
 declare function getCurrentCharacterName(): string | null;
+
+/**
+ * 获取当前角色卡头像 id
+ *
+ * @returns 当前角色卡头像 id, 如果当前没有角色卡, 则返回 `null`
+ */
+declare function getCurrentCharacterId(): string | null;
 
 /**
  * 新建 `character_name` 角色卡, 内容为 `character`
@@ -44,7 +58,7 @@ declare function getCurrentCharacterName(): string | null;
  */
 declare function createCharacter(
   character_name: Exclude<string, 'current'>,
-  character?: PartialDeep<Character>,
+  character?: TypeFest.PartialDeep<Character>,
 ): Promise<boolean>;
 
 /**
@@ -61,7 +75,7 @@ declare function createCharacter(
  */
 declare function createOrReplaceCharacter(
   character_name: Exclude<string, 'current'>,
-  character?: PartialDeep<Character>,
+  character?: TypeFest.PartialDeep<Character>,
   options?: ReplaceCharacterOptions,
 ): Promise<boolean>;
 
@@ -75,7 +89,7 @@ declare function createOrReplaceCharacter(
  * @returns 是否成功删除, 可能因角色卡不存在等原因而失败
  */
 declare function deleteCharacter(
-  character_name: LiteralUnion<'current', string>,
+  character_name: TypeFest.LiteralUnion<'current', string>,
   options?: { delete_chats?: boolean },
 ): Promise<boolean>;
 
@@ -88,7 +102,7 @@ declare function deleteCharacter(
  *
  * @throws 如果角色卡不存在, 将会抛出异常
  */
-declare function getCharacter(character_name: LiteralUnion<'current', string>): Promise<Character>;
+declare function getCharacter(character_name: TypeFest.LiteralUnion<'current', string>): Promise<Character>;
 
 type ReplaceCharacterOptions = {
   /** 酒馆网页应该防抖渲染 (debounced)、立即渲染 (immediate) 还是不刷新前端显示 (none)? 默认为性能更好的防抖渲染 */
@@ -126,7 +140,7 @@ type ReplaceCharacterOptions = {
  */
 declare function replaceCharacter(
   character_name: Exclude<string, 'current'>,
-  character: PartialDeep<Character>,
+  character: TypeFest.PartialDeep<Character>,
   options?: ReplaceCharacterOptions,
 ): Promise<void>;
 
@@ -167,6 +181,6 @@ type CharacterUpdater = ((character: Character) => Character) | ((character: Cha
  * });
  */
 declare function updateCharacterWith(
-  character_name: LiteralUnion<'current', string>,
+  character_name: TypeFest.LiteralUnion<'current', string>,
   updater: CharacterUpdater,
 ): Promise<Character>;

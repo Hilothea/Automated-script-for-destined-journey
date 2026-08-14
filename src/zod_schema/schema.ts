@@ -19,7 +19,7 @@ const assets = z
         效果: z.record(z.string(), z.string()).prefault({}),
         描述: z.string().prefault(''),
       })
-      .prefault({})
+      .prefault({}),
   )
   .prefault({});
 
@@ -38,7 +38,7 @@ const player = z
     法力值上限: z.coerce.number().prefault(0),
     体力值: z.coerce.number().prefault(0),
     体力值上限: z.coerce.number().prefault(0),
-    属性点: z.coerce.number().int().prefault(0),
+    属性点: z.coerce.number().prefault(0).transform(Math.round),
     背包: z
       .record(z.string(), InventoryItemSchema)
       .prefault({})
@@ -174,7 +174,7 @@ const partners = z
           '心里话',
           '背景故事',
         ]);
-      })
+      }),
   )
   .prefault({});
 

@@ -19,7 +19,7 @@ const assets = z
         效果: z.record(z.string(), z.string()).prefault({}),
         描述: z.string().prefault(''),
       })
-      .prefault({}),
+      .prefault({})
   )
   .prefault({});
 
@@ -174,7 +174,7 @@ const partners = z
           '心里话',
           '背景故事',
         ]);
-      }),
+      })
   )
   .prefault({});
 

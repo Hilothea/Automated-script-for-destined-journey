@@ -81,6 +81,71 @@ const handleVariableUpdate = (data: Mvu.MvuData, data_before_update: Mvu.MvuData
 };
 
 /**
+ * JSON Patch 的 replace、delta、insert/add、remove、move 会分别转为 set、add、insert、delete、move
+ *
+ * JSON Patch 在 COMMAND_PARSED 前会转换为 MVU 命令，路径中的 / 会转换为 .：
+ * - replace /path/to/variable -> { type: 'set', args: ['path.to.variable', JSON.stringify(value)] }
+ * - delta /path/to/number/variable -> { type: 'add', args: ['path.to.number.variable', JSON.stringify(value)] }
+ * - insert /path/to/object/new_key -> { type: 'insert', args: ['path.to.object', "'new_key'", JSON.stringify(value)] }
+ * - insert /path/to/array/- -> { type: 'insert', args: ['path.to.array', "'-'", JSON.stringify(value)] }
+ * - remove /path/to/object/key -> { type: 'delete', args: ['path.to.object.key'] }
+ * - remove /path/to/array/0 -> { type: 'delete', args: ['path.to.array.0'] }
+ * - move from /path/to/variable to /path/to/another/path -> { type: 'move', args: ['path.to.variable', 'path.to.another.path'] }
+ *
+ * 此处使用转换后的 MVU 命令类型；未列出的操作仍可执行。
+ */
+// 注意路径为严格匹配，没有保护父、子路径
+type PolicyCommandType = Mvu.CommandInfo['type'] | 'keyed_insert' | 'keyed_delete';
+type PolicyCommandInfo = { type: PolicyCommandType; path: string };
+
+const commandPolicies: Record<string, readonly PolicyCommandType[]> = {
+  'stat_data.事件.信号': ['set', 'add', 'delete', 'move', 'keyed_insert', 'keyed_delete'],
+};
+
+/**
+ * COMMAND_PARSED 时 key 仍是字面量（如 `'信号'`），策略路径使用实际 key。
+ * 这里只移除最外层引号，不解析转义或复杂路径；当前策略 key 均为简单字段。
+ */
+const getCommandKey = (key: string): string => key.replace(/^['"]|['"]$/g, '');
+
+const getPolicyCommandInfo = (command: Mvu.CommandInfo): PolicyCommandInfo[] => {
+  if (command.type === 'move') {
+    return command.args.map(path => ({ type: 'move', path }));
+  }
+  if (command.type === 'insert' && command.args.length === 3) {
+    const [parentPath, key] = command.args;
+    return [
+      { type: 'insert', path: parentPath },
+      {
+        type: 'keyed_insert',
+        path: `${parentPath}.${getCommandKey(key)}`,
+      },
+    ];
+  }
+  if (command.type === 'delete' && command.args.length === 2) {
+    const [parentPath, key] = command.args;
+    return [
+      { type: 'delete', path: parentPath },
+      {
+        type: 'keyed_delete',
+        path: `${parentPath}.${getCommandKey(key)}`,
+      },
+    ];
+  }
+  return [{ type: command.type, path: command.args[0] }];
+};
+
+const shouldExcludeCommand = (command: Mvu.CommandInfo): boolean =>
+  getPolicyCommandInfo(command).some(
+    ({ type, path }) => commandPolicies[path]?.includes(type) ?? false,
+  );
+
+const handleCommandParsed = (_variables: Mvu.MvuData, commands: Mvu.CommandInfo[]): void => {
+  const retainedCommands = commands.filter(command => !shouldExcludeCommand(command));
+  commands.splice(0, commands.length, ...retainedCommands);
+};
+
+/**
  * 注入所有提示词
  * 组合函数，在生成前注入所有需要的提示
  */
@@ -98,6 +163,9 @@ const injectAllPrompts = (): void => {
 const init = async (): Promise<void> => {
   // 等待 MVU 初始化完成
   await waitGlobalInitialized('Mvu');
+
+  // 监听 COMMAND_PARSED
+  eventOn(Mvu.events.COMMAND_PARSED, errorCatched(handleCommandParsed));
 
   // 监听变量更新结束事件
   eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, errorCatched(handleVariableUpdate));

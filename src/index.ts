@@ -137,7 +137,7 @@ const getPolicyCommandInfo = (command: Mvu.CommandInfo): PolicyCommandInfo[] => 
 
 const shouldExcludeCommand = (command: Mvu.CommandInfo): boolean =>
   getPolicyCommandInfo(command).some(
-    ({ type, path }) => commandPolicies[path]?.includes(type) ?? false,
+    ({ type, path }) => commandPolicies[path]?.includes(type) ?? false
   );
 
 const handleCommandParsed = (_variables: Mvu.MvuData, commands: Mvu.CommandInfo[]): void => {

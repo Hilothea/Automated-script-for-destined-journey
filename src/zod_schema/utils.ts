@@ -22,6 +22,28 @@ export const minLimitedNum = (val: number, min: number) =>
     .transform(val => Math.max(Math.round(val), min));
 
 /**
+ * 资源值 schema（生命值/法力值/体力值）
+ * - 当前: 不可超过 上限._基础 + 上限.额外
+ * - 上限._基础: 只读，仅随等级/属性/层级重算
+ * - 上限.额外: 可变，装备/状态/临时增益写这里
+ */
+export const ResourceSchema = z
+  .object({
+    当前: z.coerce.number().prefault(0),
+    上限: z
+      .object({
+        _基础: z.coerce.number().prefault(0),
+        额外: z.coerce.number().prefault(0),
+      })
+      .prefault({}),
+  })
+  .prefault({})
+  .transform(data => ({
+    ...data,
+    当前: _.clamp(data.当前, 0, Math.max(0, data.上限._基础 + data.上限.额外)),
+  }));
+
+/**
  * 截取 record 的前 n 个条目
  * @param {Record<string, T>} record - 待截取的 record
  * @param {number} limit - 限制的条目数

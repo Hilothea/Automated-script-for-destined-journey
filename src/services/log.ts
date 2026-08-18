@@ -35,12 +35,12 @@ const getLogData = (variables: MessageVariables): LogData => {
  * 当生命值从正数变为0或以下时计为死亡
  */
 const checkDeath = (current: MessageVariables, old: MessageVariables, log: LogData): void => {
-  if (!_.has(old, 'stat_data.主角.生命值')) {
+  if (!_.has(old, 'stat_data.主角.生命值.当前')) {
     return;
   }
 
-  const currentHp = safeGet(current, 'stat_data.主角.生命值', 1);
-  const oldHp = safeGet(old, 'stat_data.主角.生命值', 1);
+  const currentHp = safeGet(current, 'stat_data.主角.生命值.当前', 1);
+  const oldHp = safeGet(old, 'stat_data.主角.生命值.当前', 1);
 
   if (oldHp > 0 && currentHp <= 0) {
     log.deathCount++;

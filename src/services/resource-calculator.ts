@@ -36,18 +36,22 @@ const calculateResourcesFor = (character: any): void => {
   const mpMax = Math.round((智力 + 精神) * 50 * mpSpMul);
   const spMax = Math.round((力量 + 敏捷) * 50 * mpSpMul);
 
-  _.set(character, '生命值上限', hpMax);
-  _.set(character, '法力值上限', mpMax);
-  _.set(character, '体力值上限', spMax);
+  _.set(character, '生命值.上限._基础', hpMax);
+  _.set(character, '法力值.上限._基础', mpMax);
+  _.set(character, '体力值.上限._基础', spMax);
 
   // 当前值若超过新上限则夹紧
-  const currentHp = Number(safeGet(character, '生命值', 0)) || 0;
-  const currentMp = Number(safeGet(character, '法力值', 0)) || 0;
-  const currentSp = Number(safeGet(character, '体力值', 0)) || 0;
+  const currentHp = Number(safeGet(character, '生命值.当前', 0)) || 0;
+  const currentMp = Number(safeGet(character, '法力值.当前', 0)) || 0;
+  const currentSp = Number(safeGet(character, '体力值.当前', 0)) || 0;
 
-  if (currentHp > hpMax) _.set(character, '生命值', hpMax);
-  if (currentMp > mpMax) _.set(character, '法力值', mpMax);
-  if (currentSp > spMax) _.set(character, '体力值', spMax);
+  const hpLimit = Math.max(0, hpMax + Number(safeGet(character, '生命值.上限.额外', 0)));
+  const mpLimit = Math.max(0, mpMax + Number(safeGet(character, '法力值.上限.额外', 0)));
+  const spLimit = Math.max(0, spMax + Number(safeGet(character, '体力值.上限.额外', 0)));
+
+  _.set(character, '生命值.当前', _.clamp(currentHp, 0, hpLimit));
+  _.set(character, '法力值.当前', _.clamp(currentMp, 0, mpLimit));
+  _.set(character, '体力值.当前', _.clamp(currentSp, 0, spLimit));
 };
 
 /**

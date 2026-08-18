@@ -19,9 +19,9 @@ describe('resource calculator', () => {
       // HP = 体质 × 100 × 1 + 25 = 525
       // MP = (智力 + 精神) × 50 × 1 = 500
       // SP = (力量 + 敏捷) × 50 × 1 = 500
-      expect(variables.stat_data.主角.生命值上限).toBe(525);
-      expect(variables.stat_data.主角.法力值上限).toBe(500);
-      expect(variables.stat_data.主角.体力值上限).toBe(500);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(525);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(500);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(500);
     });
 
     test('tier 二 (中坚) multipliers', () => {
@@ -40,9 +40,9 @@ describe('resource calculator', () => {
       // HP = 5 × 100 × 2 + 25 = 1025
       // MP = (5 + 5) × 50 × 2.5 = 1250
       // SP = (5 + 5) × 50 × 2.5 = 1250
-      expect(variables.stat_data.主角.生命值上限).toBe(1025);
-      expect(variables.stat_data.主角.法力值上限).toBe(1250);
-      expect(variables.stat_data.主角.体力值上限).toBe(1250);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(1025);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(1250);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(1250);
     });
 
     test('tier 三 (精英) multipliers', () => {
@@ -61,9 +61,9 @@ describe('resource calculator', () => {
       // HP = 10 × 100 × 4 + 30 = 4030
       // MP = (6 + 4) × 50 × 6 = 3000
       // SP = (3 + 7) × 50 × 6 = 3000
-      expect(variables.stat_data.主角.生命值上限).toBe(4030);
-      expect(variables.stat_data.主角.法力值上限).toBe(3000);
-      expect(variables.stat_data.主角.体力值上限).toBe(3000);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(4030);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(3000);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(3000);
     });
 
     test('tier 四 (史诗) multipliers', () => {
@@ -82,9 +82,9 @@ describe('resource calculator', () => {
       // HP = 12 × 100 × 10 + 45 = 12045
       // MP = (8 + 7) × 50 × 15 = 11250
       // SP = (10 + 8) × 50 × 15 = 13500
-      expect(variables.stat_data.主角.生命值上限).toBe(12045);
-      expect(variables.stat_data.主角.法力值上限).toBe(11250);
-      expect(variables.stat_data.主角.体力值上限).toBe(13500);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(12045);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(11250);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(13500);
     });
 
     test('tier 五 (传说) multipliers', () => {
@@ -103,9 +103,9 @@ describe('resource calculator', () => {
       // HP = 12 × 100 × 20 + 48 = 24048
       // MP = (10 + 10) × 50 × 35 = 35000
       // SP = (8 + 8) × 50 × 35 = 28000
-      expect(variables.stat_data.主角.生命值上限).toBe(24048);
-      expect(variables.stat_data.主角.法力值上限).toBe(35000);
-      expect(variables.stat_data.主角.体力值上限).toBe(28000);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(24048);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(35000);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(28000);
     });
 
     test('tier 六 (神话) multipliers', () => {
@@ -124,9 +124,9 @@ describe('resource calculator', () => {
       // HP = 15 × 100 × 40 + 55 = 60055
       // MP = (12 + 8) × 50 × 80 = 80000
       // SP = (10 + 10) × 50 × 80 = 80000
-      expect(variables.stat_data.主角.生命值上限).toBe(60055);
-      expect(variables.stat_data.主角.法力值上限).toBe(80000);
-      expect(variables.stat_data.主角.体力值上限).toBe(80000);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(60055);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(80000);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(80000);
     });
 
     test('tier 七 (登神) multipliers', () => {
@@ -145,9 +145,9 @@ describe('resource calculator', () => {
       // HP = 20 × 100 × 100 + 100 = 200100
       // MP = (20 + 20) × 50 × 160 = 320000
       // SP = (20 + 20) × 50 × 160 = 320000
-      expect(variables.stat_data.主角.生命值上限).toBe(200100);
-      expect(variables.stat_data.主角.法力值上限).toBe(320000);
-      expect(variables.stat_data.主角.体力值上限).toBe(320000);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(200100);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(320000);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(320000);
     });
 
     test('falls back to getTierForLevel when 生命层级 is empty', () => {
@@ -164,9 +164,9 @@ describe('resource calculator', () => {
       calculateResourceLimits(variables);
 
       // Level 5 → '第二层级/中坚' → same as tier 二 test
-      expect(variables.stat_data.主角.生命值上限).toBe(1025);
-      expect(variables.stat_data.主角.法力值上限).toBe(1250);
-      expect(variables.stat_data.主角.体力值上限).toBe(1250);
+      expect(variables.stat_data.主角.生命值.上限._基础).toBe(1025);
+      expect(variables.stat_data.主角.法力值.上限._基础).toBe(1250);
+      expect(variables.stat_data.主角.体力值.上限._基础).toBe(1250);
     });
 
     test('clamps current values exceeding new max', () => {
@@ -176,9 +176,9 @@ describe('resource calculator', () => {
             等级: 1,
             生命层级: '第一层级/普通',
             属性: { 力量: 1, 敏捷: 1, 体质: 1, 智力: 1, 精神: 1 },
-            生命值: 9999,
-            法力值: 9999,
-            体力值: 9999,
+            生命值: { 当前: 9999 },
+            法力值: { 当前: 9999 },
+            体力值: { 当前: 9999 },
           },
         },
       });
@@ -188,9 +188,9 @@ describe('resource calculator', () => {
       // HP = 1 × 100 × 1 + 5 = 105
       // MP = (1 + 1) × 50 × 1 = 100
       // SP = (1 + 1) × 50 × 1 = 100
-      expect(variables.stat_data.主角.生命值).toBe(105);
-      expect(variables.stat_data.主角.法力值).toBe(100);
-      expect(variables.stat_data.主角.体力值).toBe(100);
+      expect(variables.stat_data.主角.生命值.当前).toBe(105);
+      expect(variables.stat_data.主角.法力值.当前).toBe(100);
+      expect(variables.stat_data.主角.体力值.当前).toBe(100);
     });
 
     test('does not clamp current values below new max', () => {
@@ -200,18 +200,18 @@ describe('resource calculator', () => {
             等级: 25,
             生命层级: '第七层级/登神',
             属性: { 力量: 20, 敏捷: 20, 体质: 20, 智力: 20, 精神: 20 },
-            生命值: 100,
-            法力值: 50,
-            体力值: 10,
+            生命值: { 当前: 100 },
+            法力值: { 当前: 50 },
+            体力值: { 当前: 10 },
           },
         },
       });
 
       calculateResourceLimits(variables);
 
-      expect(variables.stat_data.主角.生命值).toBe(100);
-      expect(variables.stat_data.主角.法力值).toBe(50);
-      expect(variables.stat_data.主角.体力值).toBe(10);
+      expect(variables.stat_data.主角.生命值.当前).toBe(100);
+      expect(variables.stat_data.主角.法力值.当前).toBe(50);
+      expect(variables.stat_data.主角.体力值.当前).toBe(10);
     });
   });
 
@@ -236,9 +236,9 @@ describe('resource calculator', () => {
       // HP = 3 × 100 × 1 + 15 = 315
       // MP = (3 + 3) × 50 × 1 = 300
       // SP = (3 + 3) × 50 × 1 = 300
-      expect(npc.生命值上限).toBe(315);
-      expect(npc.法力值上限).toBe(300);
-      expect(npc.体力值上限).toBe(300);
+      expect(npc.生命值.上限._基础).toBe(315);
+      expect(npc.法力值.上限._基础).toBe(300);
+      expect(npc.体力值.上限._基础).toBe(300);
     });
 
     test('calculates NPC resources at tier 四', () => {
@@ -261,9 +261,9 @@ describe('resource calculator', () => {
       // HP = 10 × 100 × 10 + 35 = 10035
       // MP = (6 + 5) × 50 × 15 = 8250
       // SP = (8 + 6) × 50 × 15 = 10500
-      expect(npc.生命值上限).toBe(10035);
-      expect(npc.法力值上限).toBe(8250);
-      expect(npc.体力值上限).toBe(10500);
+      expect(npc.生命值.上限._基础).toBe(10035);
+      expect(npc.法力值.上限._基础).toBe(8250);
+      expect(npc.体力值.上限._基础).toBe(10500);
     });
 
     test('calculates NPC resources with empty 生命层级 via level fallback', () => {
@@ -287,9 +287,9 @@ describe('resource calculator', () => {
       // HP = 5 × 100 × 4 + 25 = 2025
       // MP = (5 + 5) × 50 × 6 = 3000
       // SP = (5 + 5) × 50 × 6 = 3000
-      expect(npc.生命值上限).toBe(2025);
-      expect(npc.法力值上限).toBe(3000);
-      expect(npc.体力值上限).toBe(3000);
+      expect(npc.生命值.上限._基础).toBe(2025);
+      expect(npc.法力值.上限._基础).toBe(3000);
+      expect(npc.体力值.上限._基础).toBe(3000);
     });
 
     test('handles multiple NPCs independently', () => {
@@ -318,14 +318,14 @@ describe('resource calculator', () => {
       const mage = variables.stat_data.关系列表['法师'];
 
       // 战士: HP = 8×100×1 + 20 = 820, MP = (1+1)×50×1 = 100, SP = (8+2)×50×1 = 500
-      expect(warrior.生命值上限).toBe(820);
-      expect(warrior.法力值上限).toBe(100);
-      expect(warrior.体力值上限).toBe(500);
+      expect(warrior.生命值.上限._基础).toBe(820);
+      expect(warrior.法力值.上限._基础).toBe(100);
+      expect(warrior.体力值.上限._基础).toBe(500);
 
       // 法师: HP = 2×100×2 + 20 = 420, MP = (8+7)×50×2.5 = 1875, SP = (1+2)×50×2.5 = 375
-      expect(mage.生命值上限).toBe(420);
-      expect(mage.法力值上限).toBe(1875);
-      expect(mage.体力值上限).toBe(375);
+      expect(mage.生命值.上限._基础).toBe(420);
+      expect(mage.法力值.上限._基础).toBe(1875);
+      expect(mage.体力值.上限._基础).toBe(375);
     });
 
     test('clamps NPC current values exceeding new max', () => {
@@ -336,9 +336,9 @@ describe('resource calculator', () => {
               等级: 1,
               生命层级: '第一层级/普通',
               属性: { 力量: 1, 敏捷: 1, 体质: 1, 智力: 1, 精神: 1 },
-              生命值: 500,
-              法力值: 500,
-              体力值: 500,
+              生命值: { 当前: 500 },
+              法力值: { 当前: 500 },
+              体力值: { 当前: 500 },
               在场: true,
             },
           },
@@ -349,15 +349,15 @@ describe('resource calculator', () => {
 
       const npc = variables.stat_data.关系列表['受伤者'];
       // HP = 1×100×1 + 5 = 105, MP = 2×50×1 = 100, SP = 2×50×1 = 100
-      expect(npc.生命值).toBe(105);
-      expect(npc.法力值).toBe(100);
-      expect(npc.体力值).toBe(100);
+      expect(npc.生命值.当前).toBe(105);
+      expect(npc.法力值.当前).toBe(100);
+      expect(npc.体力值.当前).toBe(100);
     });
   });
 
   test('handles empty 关系列表 gracefully', () => {
     const variables = buildVariables();
     expect(() => calculateResourceLimits(variables)).not.toThrow();
-    expect(variables.stat_data.主角.生命值上限).toBeDefined();
+    expect(variables.stat_data.主角.生命值.上限._基础).toBeDefined();
   });
 });

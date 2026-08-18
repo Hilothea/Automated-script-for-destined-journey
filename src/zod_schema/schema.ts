@@ -3,10 +3,28 @@ import {
   IdentitySchema,
   InventoryItemSchema,
   minLimitedNum,
+  ResourceSchema,
   StatusEffectSchema,
   TaskSchema,
 } from './utils';
 
+const internalAsset = z
+  .record(
+    z.string(),
+    z
+      .object({
+        品质: z.string().prefault(''),
+        标签: z.array(z.string()).prefault([]).transform(_.uniq),
+        数量: z.coerce.number().prefault(0),
+        效果: z.record(z.string(), z.string()).prefault({}),
+        描述: z.string().prefault(''),
+        总占用空间: z.string().prefault(''),
+      })
+      .prefault({})
+  )
+  .prefault({});
+
+// 资产的类型必须复用，不得按同一类型继续细分；资产状态随获得、失去、交易、改造、变更和结算同步更新
 const assets = z
   .record(
     z.string(),
@@ -14,10 +32,12 @@ const assets = z
       .object({
         品质: z.string().prefault(''),
         类型: z.string().prefault(''),
-        结算: z.string().prefault(''),
         标签: z.array(z.string()).prefault([]).transform(_.uniq),
-        效果: z.record(z.string(), z.string()).prefault({}),
+        总空间: z.string().prefault(''),
+        结算: z.string().prefault(''),
         描述: z.string().prefault(''),
+        位置: z.string().prefault(''),
+        内部资产: internalAsset,
       })
       .prefault({})
   )
@@ -32,12 +52,9 @@ const player = z
     累计经验值: z.coerce.number().prefault(0),
     升级所需经验: z.union([z.coerce.number().prefault(120), z.literal('MAX')]),
     冒险者等级: z.string().prefault('未评级'),
-    生命值: z.coerce.number().prefault(0),
-    生命值上限: z.coerce.number().prefault(0),
-    法力值: z.coerce.number().prefault(0),
-    法力值上限: z.coerce.number().prefault(0),
-    体力值: z.coerce.number().prefault(0),
-    体力值上限: z.coerce.number().prefault(0),
+    生命值: ResourceSchema,
+    法力值: ResourceSchema,
+    体力值: ResourceSchema,
     属性点: z.coerce.number().prefault(0).transform(Math.round),
     背包: z
       .record(z.string(), InventoryItemSchema)
@@ -52,9 +69,6 @@ const player = z
     const processed = {
       ...data,
       升级所需经验: data.等级 >= 25 ? 'MAX' : data.升级所需经验,
-      生命值: _.clamp(data.生命值, 0, data.生命值上限),
-      法力值: _.clamp(data.法力值, 0, data.法力值上限),
-      体力值: _.clamp(data.体力值, 0, data.体力值上限),
     };
 
     return _.pick(processed, [
@@ -73,11 +87,8 @@ const player = z
       // 属性
       '属性',
       // 资源值
-      '生命值上限',
       '生命值',
-      '法力值上限',
       '法力值',
-      '体力值上限',
       '体力值',
       // 状态效果
       '状态效果',
@@ -107,12 +118,9 @@ const partners = z
         喜爱: z.string().prefault(''),
         外貌: z.string().prefault(''),
         着装: z.string().prefault(''),
-        生命值: z.coerce.number().prefault(0),
-        生命值上限: z.coerce.number().prefault(0),
-        法力值: z.coerce.number().prefault(0),
-        法力值上限: z.coerce.number().prefault(0),
-        体力值: z.coerce.number().prefault(0),
-        体力值上限: z.coerce.number().prefault(0),
+        生命值: ResourceSchema,
+        法力值: ResourceSchema,
+        体力值: ResourceSchema,
         命定契约: z.boolean().prefault(false),
         好感度: clampedMum(0, -100, 100),
         状态效果: z.record(z.string(), StatusEffectSchema).prefault({}),
@@ -126,14 +134,7 @@ const partners = z
       })
       .prefault({})
       .transform(data => {
-        const processed = {
-          ...data,
-          生命值: _.clamp(data.生命值, 0, data.生命值上限),
-          法力值: _.clamp(data.法力值, 0, data.法力值上限),
-          体力值: _.clamp(data.体力值, 0, data.体力值上限),
-        };
-
-        return _.pick(processed, [
+        return _.pick(data, [
           // 状态信息
           '在场',
           // 用户管理标签
@@ -151,11 +152,8 @@ const partners = z
           // 等级
           '等级',
           // 资源值
-          '生命值上限',
           '生命值',
-          '法力值上限',
           '法力值',
-          '体力值上限',
           '体力值',
           // 属性
           '属性',

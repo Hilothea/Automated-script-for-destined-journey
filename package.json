@@ -24,7 +24,7 @@
     "@types/jquery": "^4.0.1",
     "@types/lodash": "^4.17.25",
     "@types/node": "^25.9.5",
-    "@types/toastr": "^2.1.43",
+    "@types/toastr": "^2.1.44",
     "compare-versions": "^6.1.1",
     "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",

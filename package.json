@@ -1,7 +1,7 @@
 {
   "name": "automated-script-for-destined-journey",
-  "version": "3.4.2",
-  "description": "命定的异世界开发之旅自动化脚本 - 用于处理角色升级、货币系统、事件链管理等游戏机制",
+  "version": "3.4.3",
+  "description": "命定的异世界开发之旅自动化脚本",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch --mode development",

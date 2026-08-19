@@ -92,7 +92,8 @@ export const EquipmentSchema = BaseItemSchema.extend({
  */
 export const SkillSchema = BaseItemSchema.extend({
   消耗: z.string().prefault(''),
-}).transform(data => _.pick(data, ['品质', '类型', '消耗', '标签', '效果', '描述']));
+  _隐藏: z.boolean().prefault(false),
+}).transform(data => _.pick(data, ['品质', '类型', '消耗', '标签', '效果', '描述', '_隐藏']));
 
 /**
  * 状态效果 schema (增益/减益/特殊效果)
@@ -112,7 +113,8 @@ export const StatusEffectSchema = z
  */
 export const InventoryItemSchema = BaseItemSchema.extend({
   数量: z.coerce.number().prefault(1),
-}).transform(data => _.pick(data, ['品质', '类型', '数量', '标签', '效果', '描述']));
+  _隐藏: z.boolean().prefault(false),
+}).transform(data => _.pick(data, ['品质', '类型', '数量', '标签', '效果', '描述', '_隐藏']));
 
 /**
  * 基础属性 schema

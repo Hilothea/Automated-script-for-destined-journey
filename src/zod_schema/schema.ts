@@ -38,6 +38,7 @@ const assets = z
         描述: z.string().prefault(''),
         位置: z.string().prefault(''),
         内部资产: internalAsset,
+        _隐藏: z.boolean().prefault(false),
       })
       .prefault({})
   )
@@ -113,6 +114,7 @@ const partners = z
       .object({
         ...IdentitySchema.shape,
         在场: z.boolean().prefault(false),
+        _隐藏: z.boolean().prefault(false),
         标签: z.array(z.string()).prefault([]).transform(_.uniq),
         性格: z.string().prefault(''),
         喜爱: z.string().prefault(''),
@@ -133,10 +135,11 @@ const partners = z
         背景故事: z.string().prefault(''),
       })
       .prefault({})
-      .transform(data => {
-        return _.pick(data, [
+      .transform(data =>
+        _.pick(data, [
           // 状态信息
           '在场',
+          '_隐藏',
           // 用户管理标签
           '标签',
           // 基础信息
@@ -171,8 +174,8 @@ const partners = z
           // 故事信息
           '心里话',
           '背景故事',
-        ]);
-      })
+        ])
+      )
   )
   .prefault({});
 

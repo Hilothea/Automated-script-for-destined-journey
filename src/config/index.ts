@@ -94,36 +94,50 @@ export const isMaxLevel = (target_level: number): boolean => {
   return target_level >= GameConfig.MaxLevel;
 };
 
-/** HP 乘数表 - 各生命层级对应的 HP 乘数 */
-export const HpMultipliers: Readonly<Record<string, number>> = {
-  '第一层级/普通': 1,
-  '第二层级/中坚': 2,
-  '第三层级/精英': 4,
-  '第四层级/史诗': 10,
-  '第五层级/传说': 20,
-  '第六层级/神话': 40,
-  '第七层级/登神': 100,
+/** HP 乘数表 - 各里程碑等级对应的 HP 乘数（低于此等级则取下一档） */
+export const HpMultipliers: Readonly<Record<number, number>> = {
+  1: 1,
+  5: 2,
+  9: 4,
+  13: 10,
+  17: 20,
+  21: 40,
+  25: 100,
 } as const;
 
-/** MP/SP 乘数表 - 各生命层级对应的 MP/SP 乘数 */
-export const MpSpMultipliers: Readonly<Record<string, number>> = {
-  '第一层级/普通': 1,
-  '第二层级/中坚': 2.5,
-  '第三层级/精英': 6,
-  '第四层级/史诗': 15,
-  '第五层级/传说': 35,
-  '第六层级/神话': 80,
-  '第七层级/登神': 160,
+/** MP/SP 乘数表 - 各里程碑等级对应的 MP/SP 乘数（低于此等级则取下一档） */
+export const MpSpMultipliers: Readonly<Record<number, number>> = {
+  1: 1,
+  5: 2.5,
+  9: 6,
+  13: 15,
+  17: 35,
+  21: 80,
+  25: 160,
 } as const;
 
-/** 获取指定生命层级的 HP 乘数 */
-export const getHpMultiplier = (tier: string): number => {
-  return HpMultipliers[tier] ?? HpMultipliers['第一层级/普通'];
+/**
+ * 在等级->乘数表中查找给定等级生效的乘数
+ * 取不大于 level 的最高里程碑等级对应档位
+ */
+const lookupMultiplierByLevel = (table: Readonly<Record<number, number>>, level: number): number => {
+  const validLevels = _.chain(table)
+    .keys()
+    .map(Number)
+    .filter(lvl => level >= lvl)
+    .value();
+  const highest = _.max(validLevels);
+  return highest === undefined ? table[1] : table[highest];
 };
 
-/** 获取指定生命层级的 MP/SP 乘数 */
-export const getMpSpMultiplier = (tier: string): number => {
-  return MpSpMultipliers[tier] ?? MpSpMultipliers['第一层级/普通'];
+/** 获取指定等级对应的 HP 乘数 */
+export const getHpMultiplier = (level: number): number => {
+  return lookupMultiplierByLevel(HpMultipliers, level);
+};
+
+/** 获取指定等级对应的 MP/SP 乘数 */
+export const getMpSpMultiplier = (level: number): number => {
+  return lookupMultiplierByLevel(MpSpMultipliers, level);
 };
 
 /** 获取所有里程碑等级（降序排列） */

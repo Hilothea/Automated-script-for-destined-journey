@@ -1,6 +1,6 @@
 {
   "name": "automated-script-for-destined-journey",
-  "version": "3.4.4",
+  "version": "3.4.5",
   "description": "命定的异世界开发之旅自动化脚本",
   "type": "module",
   "scripts": {

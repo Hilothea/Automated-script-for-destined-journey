@@ -7,7 +7,7 @@
  *   SP = (力量 + 敏捷) × 50 × [MP/SP乘数]
  */
 
-import { getHpMultiplier, getMpSpMultiplier, getTierForLevel } from '../config';
+import { getHpMultiplier, getMpSpMultiplier } from '../config';
 import type { MessageVariables } from '../types';
 import { safeGet } from '../utils';
 
@@ -19,10 +19,9 @@ const getAttr = (obj: any, key: string): number => {
 /** 计算单个角色（主角或 NPC）的资源上限并回写 */
 const calculateResourcesFor = (character: any, initializeCurrent = false): void => {
   const level = Number(safeGet(character, '等级', 1)) || 1;
-  const tier = safeGet(character, '生命层级', '') || getTierForLevel(level);
 
-  const hpMul = getHpMultiplier(tier);
-  const mpSpMul = getMpSpMultiplier(tier);
+  const hpMul = getHpMultiplier(level);
+  const mpSpMul = getMpSpMultiplier(level);
 
   const 力量 = getAttr(character, '力量');
   const 敏捷 = getAttr(character, '敏捷');

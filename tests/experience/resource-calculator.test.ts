@@ -150,7 +150,7 @@ describe('resource calculator', () => {
       expect(variables.stat_data.主角.体力值.上限._基础).toBe(320000);
     });
 
-    test('falls back to getTierForLevel when 生命层级 is empty', () => {
+    test('uses level-based multipliers regardless of 生命层级', () => {
       const variables = buildVariables({
         stat_data: {
           主角: {
@@ -163,7 +163,7 @@ describe('resource calculator', () => {
 
       calculateResourceLimits(variables);
 
-      // Level 5 → '第二层级/中坚' → same as tier 二 test
+      // Level 5 → HP mul=2, MP/SP mul=2.5 (same as tier 二 test)
       expect(variables.stat_data.主角.生命值.上限._基础).toBe(1025);
       expect(variables.stat_data.主角.法力值.上限._基础).toBe(1250);
       expect(variables.stat_data.主角.体力值.上限._基础).toBe(1250);
@@ -329,7 +329,7 @@ describe('resource calculator', () => {
       expect(npc.体力值.上限._基础).toBe(10500);
     });
 
-    test('calculates NPC resources with empty 生命层级 via level fallback', () => {
+    test('calculates NPC resources via level-based multipliers', () => {
       const variables = buildVariables({
         stat_data: {
           关系列表: {
@@ -346,7 +346,7 @@ describe('resource calculator', () => {
       calculateResourceLimits(variables);
 
       const npc = variables.stat_data.关系列表['凯特'];
-      // Level 9 → '第三层级/精英' → HP mul=4, MP/SP mul=6
+      // Level 9 → HP mul=4, MP/SP mul=6
       // HP = 5 × 100 × 4 + 25 = 2025
       // MP = (5 + 5) × 50 × 6 = 3000
       // SP = (5 + 5) × 50 × 6 = 3000

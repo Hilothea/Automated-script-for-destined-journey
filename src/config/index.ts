@@ -120,7 +120,10 @@ export const MpSpMultipliers: Readonly<Record<number, number>> = {
  * 在等级->乘数表中查找给定等级生效的乘数
  * 取不大于 level 的最高里程碑等级对应档位
  */
-const lookupMultiplierByLevel = (table: Readonly<Record<number, number>>, level: number): number => {
+const lookupMultiplierByLevel = (
+  table: Readonly<Record<number, number>>,
+  level: number
+): number => {
   const validLevels = _.chain(table)
     .keys()
     .map(Number)

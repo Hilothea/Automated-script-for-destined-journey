@@ -241,6 +241,69 @@ describe('resource calculator', () => {
       expect(npc.体力值.上限._基础).toBe(300);
     });
 
+    test('initializes a new NPC with full resources', () => {
+      const variables = buildVariables({
+        stat_data: {
+          关系列表: {
+            '新 NPC': {
+              等级: 1,
+              生命层级: '第一层级/普通',
+              属性: { 力量: 3, 敏捷: 3, 体质: 3, 智力: 3, 精神: 3 },
+              生命值: { 当前: 500 },
+              法力值: { 当前: 500 },
+              体力值: { 当前: 500 },
+              在场: true,
+            },
+          },
+        },
+      });
+      const oldVariables = buildVariables();
+
+      calculateResourceLimits(variables, oldVariables);
+
+      const npc = variables.stat_data.关系列表['新 NPC'];
+      expect(npc.生命值.当前).toBe(315);
+      expect(npc.法力值.当前).toBe(300);
+      expect(npc.体力值.当前).toBe(300);
+    });
+
+    test('refills an NPC when it becomes present', () => {
+      const variables = buildVariables({
+        stat_data: {
+          关系列表: {
+            '离场 NPC': {
+              等级: 1,
+              生命层级: '第一层级/普通',
+              属性: { 力量: 3, 敏捷: 3, 体质: 3, 智力: 3, 精神: 3 },
+              在场: true,
+              生命值: { 当前: 1 },
+              法力值: { 当前: 2 },
+              体力值: { 当前: 3 },
+            },
+          },
+        },
+      });
+      const oldVariables = buildVariables({
+        stat_data: {
+          关系列表: {
+            '离场 NPC': {
+              在场: false,
+              生命值: { 当前: 1 },
+              法力值: { 当前: 2 },
+              体力值: { 当前: 3 },
+            },
+          },
+        },
+      });
+
+      calculateResourceLimits(variables, oldVariables);
+
+      const npc = variables.stat_data.关系列表['离场 NPC'];
+      expect(npc.生命值.当前).toBe(315);
+      expect(npc.法力值.当前).toBe(300);
+      expect(npc.体力值.当前).toBe(300);
+    });
+
     test('calculates NPC resources at tier 四', () => {
       const variables = buildVariables({
         stat_data: {

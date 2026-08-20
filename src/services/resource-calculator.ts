@@ -17,7 +17,7 @@ const getAttr = (obj: any, key: string): number => {
 };
 
 /** 计算单个角色（主角或 NPC）的资源上限并回写 */
-const calculateResourcesFor = (character: any): void => {
+const calculateResourcesFor = (character: any, initializeCurrent = false): void => {
   const level = Number(safeGet(character, '等级', 1)) || 1;
   const tier = safeGet(character, '生命层级', '') || getTierForLevel(level);
 
@@ -49,24 +49,35 @@ const calculateResourcesFor = (character: any): void => {
   const mpLimit = Math.max(0, mpMax + Number(safeGet(character, '法力值.上限.额外', 0)));
   const spLimit = Math.max(0, spMax + Number(safeGet(character, '体力值.上限.额外', 0)));
 
-  _.set(character, '生命值.当前', _.clamp(currentHp, 0, hpLimit));
-  _.set(character, '法力值.当前', _.clamp(currentMp, 0, mpLimit));
-  _.set(character, '体力值.当前', _.clamp(currentSp, 0, spLimit));
+  _.set(character, '生命值.当前', initializeCurrent ? hpLimit : _.clamp(currentHp, 0, hpLimit));
+  _.set(character, '法力值.当前', initializeCurrent ? mpLimit : _.clamp(currentMp, 0, mpLimit));
+  _.set(character, '体力值.当前', initializeCurrent ? spLimit : _.clamp(currentSp, 0, spLimit));
 };
 
 /**
  * 计算所有角色（主角 + NPC）的资源上限
  *
  * @param new_variables - 更新后的变量数据
+ * @param old_variables - 更新前的变量数据，用于识别首次出现的 NPC
  */
-export const calculateResourceLimits = (new_variables: MessageVariables): void => {
+export const calculateResourceLimits = (
+  new_variables: MessageVariables,
+  old_variables: MessageVariables = new_variables
+): void => {
   // 计算主角资源上限
   const character = safeGet(new_variables, 'stat_data.主角', {} as any);
   calculateResourcesFor(character);
 
   // 计算 NPC 资源上限
   const partners = safeGet(new_variables, 'stat_data.关系列表', {} as Record<string, any>);
-  _.forEach(partners, (npc: any) => {
-    calculateResourcesFor(npc);
+  const oldPartners = safeGet(old_variables, 'stat_data.关系列表', {} as Record<string, any>);
+  _.forEach(partners, (npc: any, name: string) => {
+    const oldNpc = oldPartners[name];
+    const isNewNpc = !_.has(oldPartners, name);
+    const wasPresent = safeGet(oldNpc, '在场', undefined as boolean | undefined);
+    const isPresent = safeGet(npc, '在场', undefined as boolean | undefined);
+    const becamePresent = wasPresent !== true && isPresent === true;
+
+    calculateResourcesFor(npc, isNewNpc || becamePresent);
   });
 };

@@ -71,7 +71,7 @@ const handleVariableUpdate = (data: Mvu.MvuData, data_before_update: Mvu.MvuData
   maintainCharacterData(current, old);
   processExperienceAndLevel(current, old);
   processNPCExperienceAndLevel(current, old);
-  calculateResourceLimits(current);
+  calculateResourceLimits(current, old);
   const shouldDeleteEventCache = processEvent(current);
   logSystem(current, old);
 
